@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AS — Logo 3D</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #050508; }
+    canvas { display: block; }
+    #msg {
+      position: fixed; inset: 0; display: flex; align-items: center;
+      justify-content: center; color: #555; font: 12px/1.6 monospace;
+      letter-spacing: .12em; text-transform: uppercase; text-align: center;
+      pointer-events: none; white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+<div id="msg">Génération…</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE          from 'three'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js'
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BLOC 1 — TRAITEMENT D'IMAGE
+   Lit les pixels du logo et extrait les contours via Marching Squares.
+   Aucune coordonnée codée en dur : le logo est sa propre géométrie.
+═══════════════════════════════════════════════════════════════════════ */
+
+function loadImage(url) {
+  return new Promise((res, rej) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload  = () => res(img)
+    img.onerror = () => rej(new Error(
+      `Impossible de charger le logo.\nOuvre via : http://localhost:5173/logo3d.html`))
+    img.src = url
+  })
+}
+
+function rasterize(img, size, threshold = 110) {
+  const c = Object.assign(document.createElement('canvas'), { width: size, height: size })
+  const ctx = c.getContext('2d')
+  ctx.drawImage(img, 0, 0, size, size)
+  const px   = ctx.getImageData(0, 0, size, size).data
+  const mask = new Uint8Array(size * size)
+  for (let i = 0; i < size * size; i++) mask[i] = px[i * 4] > threshold ? 1 : 0
+  return mask
+}
+
+/* Marching Squares — segments aux frontières blanc/noir */
+function marchingSquares(mask, W, H) {
+  const segs = []
+  const T = (x, y) => [x + .5, y      ]
+  const R = (x, y) => [x + 1,  y + .5 ]
+  const B = (x, y) => [x + .5, y + 1  ]
+  const L = (x, y) => [x,      y + .5 ]
+
+  for (let y = 0; y < H - 1; y++) {
+    for (let x = 0; x < W - 1; x++) {
+      const tl = mask[ y      * W + x    ]
+      const tr = mask[ y      * W + x + 1]
+      const br = mask[(y + 1) * W + x + 1]
+      const bl = mask[(y + 1) * W + x    ]
+      switch ((tl << 3) | (tr << 2) | (br << 1) | bl) {
+        case  1: segs.push([B(x,y), L(x,y)]); break
+        case  2: segs.push([R(x,y), B(x,y)]); break
+        case  3: segs.push([R(x,y), L(x,y)]); break
+        case  4: segs.push([T(x,y), R(x,y)]); break
+        case  5: segs.push([T(x,y), L(x,y)], [R(x,y), B(x,y)]); break
+        case  6: segs.push([T(x,y), B(x,y)]); break
+        case  7: segs.push([T(x,y), L(x,y)]); break
+        case  8: segs.push([L(x,y), T(x,y)]); break
+        case  9: segs.push([B(x,y), T(x,y)]); break
+        case 10: segs.push([L(x,y), B(x,y)], [T(x,y), R(x,y)]); break
+        case 11: segs.push([T(x,y), R(x,y)]); break
+        case 12: segs.push([L(x,y), R(x,y)]); break
+        case 13: segs.push([R(x,y), B(x,y)]); break
+        case 14: segs.push([L(x,y), B(x,y)]); break
+      }
+    }
+  }
+  return segs
+}
+
+/* Connexion des segments en polylignes fermées */
+function connectSegments(segs) {
+  const k    = ([x, y]) => `${x},${y}`
+  const adj  = new Map()
+  segs.forEach(([a, b], i) => {
+    const ka = k(a), kb = k(b)
+    ;[ka, kb].forEach((key, s) => {
+      if (!adj.has(key)) adj.set(key, [])
+      adj.get(key).push({ i, other: s === 0 ? kb : ka })
+    })
+  })
+
+  const used  = new Set()
+  const polys = []
+
+  for (let si = 0; si < segs.length; si++) {
+    if (used.has(si)) continue
+    used.add(si)
+    const pts = [segs[si][0], segs[si][1]]
+    let cur = k(segs[si][1])
+    for (;;) {
+      const nxt = (adj.get(cur) || []).find(e => !used.has(e.i))
+      if (!nxt) break
+      used.add(nxt.i)
+      const s = segs[nxt.i]
+      pts.push(k(s[0]) === cur ? s[1] : s[0])
+      cur = nxt.other
+    }
+    if (pts.length > 4) polys.push(pts)
+  }
+  return polys
+}
+
+/* Chaikin — lissage des angles (sur chemin fermé) */
+function chaikin(pts, passes = 2) {
+  let p = pts
+  for (let n = 0; n < passes; n++) {
+    const s = []
+    for (let i = 0; i < p.length; i++) {
+      const [x0, y0] = p[i]
+      const [x1, y1] = p[(i + 1) % p.length]
+      s.push([x0 * .75 + x1 * .25, y0 * .75 + y1 * .25])
+      s.push([x0 * .25 + x1 * .75, y0 * .25 + y1 * .75])
+    }
+    p = s
+  }
+  return p
+}
+
+/* Douglas-Peucker — réduction du nombre de points */
+function rdp(pts, eps) {
+  if (pts.length < 3) return pts
+  const [x1, y1] = pts[0]
+  const [x2, y2] = pts[pts.length - 1]
+  const dx = x2 - x1, dy = y2 - y1
+  const len = Math.hypot(dx, dy) || 1e-12
+  let maxD = 0, maxI = 0
+  for (let i = 1; i < pts.length - 1; i++) {
+    const d = Math.abs(dy * pts[i][0] - dx * pts[i][1] + x2 * y1 - y2 * x1) / len
+    if (d > maxD) { maxD = d; maxI = i }
+  }
+  if (maxD > eps)
+    return [...rdp(pts.slice(0, maxI + 1), eps).slice(0, -1), ...rdp(pts.slice(maxI), eps)]
+  return [pts[0], pts[pts.length - 1]]
+}
+
+/* Aire signée.
+   Dans l'espace pixel (Y vers le bas) :
+   - Contour extérieur → sens anti-horaire → aire NÉGATIVE
+   - Trou intérieur   → sens horaire      → aire POSITIVE        */
+function signedArea(pts) {
+  let a = 0
+  for (let i = 0; i < pts.length; i++) {
+    const j = (i + 1) % pts.length
+    a += pts[i][0] * pts[j][1] - pts[j][0] * pts[i][1]
+  }
+  return a * .5
+}
+
+function centroid(pts) {
+  let cx = 0, cy = 0
+  pts.forEach(([x, y]) => { cx += x; cy += y })
+  return [cx / pts.length, cy / pts.length]
+}
+
+function pointInPoly([tx, ty], poly) {
+  let inside = false
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j]
+    if ((yi > ty) !== (yj > ty) && tx < ((xj - xi) * (ty - yi)) / (yj - yi) + xi)
+      inside = !inside
+  }
+  return inside
+}
+
+/* Pixel → THREE.Shape
+   - Les points sont INVERSÉS pour corriger l'orientation après la
+     négation de l'axe Y (pixel Y↓ → Three.js Y↑).
+   - Résultat : sens anti-horaire dans Three.js pour les contours,
+     sens horaire pour les trous. */
+function toShape(pts, W, scale) {
+  const norm = ([x, y]) => [(x / W - .5) * scale, (y / W - .5) * -scale]
+  const rev  = [...pts].reverse()          // ← correction du sens de rotation
+  const sh   = new THREE.Shape()
+  const [fx, fy] = norm(rev[0])
+  sh.moveTo(fx, fy)
+  for (let i = 1; i < rev.length; i++) {
+    const [px, py] = norm(rev[i])
+    sh.lineTo(px, py)
+  }
+  sh.closePath()
+  return sh
+}
+
+/* Pipeline principal */
+async function imageToShapes(url, {
+  size      = 320,
+  threshold = 110,
+  rdpEps    = 1.6,
+  minPts    = 5,
+  scale     = 3.4,
+} = {}) {
+  const img  = await loadImage(url)
+  const mask = rasterize(img, size, threshold)
+  const segs = marchingSquares(mask, size, size)
+  const raw  = connectSegments(segs)
+
+  const polys = raw.map(p => {
+    // Retire le point de fermeture dupliqué s'il existe
+    const first = p[0], last = p[p.length - 1]
+    const clean = (first[0] === last[0] && first[1] === last[1]) ? p.slice(0, -1) : p
+    return rdp(chaikin(clean, 2), rdpEps)
+  }).filter(p => p.length >= minPts)
+
+  // Contours extérieurs → aire négative ; on filtre les petits éléments
+  // parasites (étoile du logo, artefacts JPEG) avec un seuil d'aire minimum
+  const MIN_AREA = size * size * 0.004      // ~0.4 % de l'image = seuil raisonnable
+  const outers = polys
+    .filter(p => signedArea(p) < 0)
+    .filter(p => Math.abs(signedArea(p)) > MIN_AREA)
+  // Trous → aire positive (horaire, espace pixel Y↓)
+  const holes  = polys.filter(p => signedArea(p) > 0)
+
+  if (!outers.length) throw new Error('Aucun contour détecté — vérifie le seuil.')
+
+  return outers.map(o => {
+    const sh = toShape(o, size, scale)
+    holes.forEach(h => {
+      if (pointInPoly(centroid(h), o)) sh.holes.push(toShape(h, size, scale))
+    })
+    return sh
+  })
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BLOC 2 — THREE.JS
+═══════════════════════════════════════════════════════════════════════ */
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+renderer.setSize(innerWidth, innerHeight)
+renderer.toneMapping         = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 1.55
+document.body.appendChild(renderer.domElement)
+
+const scene  = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(36, innerWidth / innerHeight, .1, 100)
+camera.position.set(0, 0, 9.5)
+
+const pmrem = new THREE.PMREMGenerator(renderer)
+scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture
+pmrem.dispose()
+
+const chromeMat = new THREE.MeshPhysicalMaterial({
+  color:              new THREE.Color('#BDBDCE'),
+  metalness:          0.96,
+  roughness:          0.06,
+  clearcoat:          0.65,
+  clearcoatRoughness: 0.04,
+  reflectivity:       1.0,
+  emissive:           new THREE.Color('#606070'),
+  emissiveIntensity:  0.06,
+})
+
+const EXTRUDE = {
+  depth:            0.40,
+  bevelEnabled:     true,
+  bevelThickness:   0.055,
+  bevelSize:        0.034,
+  bevelOffset:      0,
+  bevelSegments:    18,
+  curveSegments:    72,
+}
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.20))
+const kl = new THREE.DirectionalLight(0xffffff, 5.5); kl.position.set(5,  9,  7); scene.add(kl)
+const fl = new THREE.DirectionalLight(0x8899CC, 2.0); fl.position.set(-7, 2,  4); scene.add(fl)
+const rl = new THREE.DirectionalLight(0xffffff, 1.5); rl.position.set(1, -7,  5); scene.add(rl)
+const bl = new THREE.PointLight(0x5060A0, 3.0, 30);   bl.position.set(3,  5, -5); scene.add(bl)
+
+const group  = new THREE.Group()
+scene.add(group)
+
+const msgEl = document.getElementById('msg')
+
+imageToShapes('/logoalexissaucede.jpg')
+  .then(shapes => {
+    msgEl.remove()
+    const geos   = shapes.map(sh => new THREE.ExtrudeGeometry(sh, EXTRUDE))
+    const merged = mergeGeometries(geos, false)
+    const mesh   = new THREE.Mesh(merged ?? geos[0], chromeMat)
+    if (!merged) geos.slice(1).forEach(g => group.add(new THREE.Mesh(g, chromeMat)))
+    group.add(mesh)
+
+    const bbox = new THREE.Box3().setFromObject(group)
+    const c    = bbox.getCenter(new THREE.Vector3())
+    group.children.forEach(m => m.position.sub(c))
+  })
+  .catch(err => { msgEl.textContent = err.message })
+
+const clock = new THREE.Clock()
+;(function render() {
+  requestAnimationFrame(render)
+  const t = clock.getElapsedTime()
+  group.rotation.y = t * 0.45
+  group.position.y = Math.sin(t * 0.80) * 0.10
+  renderer.render(scene, camera)
+})()
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize(innerWidth, innerHeight)
+})
+</script>
+</body>
+</html>
