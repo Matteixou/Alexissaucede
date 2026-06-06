@@ -77,7 +77,7 @@ export default function Hero({ onCtaClick }) {
                 className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[11px] tracking-[0.22em] uppercase font-heading font-bold"
                 style={{ background: '#E8FF00' }}
               >
-                <span className="relative z-10">Réserver mon appel gratuit</span>
+                <span className="relative z-10">Réserver mon bilan personnalisé gratuit</span>
                 <motion.span
                   className="absolute inset-0 bg-white"
                   initial={{ x: '-105%' }}
@@ -100,7 +100,7 @@ export default function Hero({ onCtaClick }) {
             >
               <span className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ash">
                 <span style={{ color: '#E8FF00' }}>✓</span>
-                Premier appel gratuit
+                Bilan personnalisé gratuit
               </span>
               <span className="text-steel/60 hidden sm:inline">·</span>
               <span className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ash">
@@ -165,10 +165,10 @@ export default function Hero({ onCtaClick }) {
                 style={{ zIndex: 20 }}
               >
                 <p className="text-[9px] tracking-widest uppercase text-ash mb-1">
-                  Appel découverte
+                  Bilan personnalisé
                 </p>
                 <p className="font-heading font-bold text-sm text-bone uppercase tracking-wide">
-                  Premier appel gratuit
+                  Bilan personnalisé gratuit
                 </p>
               </motion.div>
 

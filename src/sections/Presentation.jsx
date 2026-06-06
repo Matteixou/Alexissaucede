@@ -126,7 +126,7 @@ export default function Presentation() {
                 className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[11px] tracking-[0.22em] uppercase font-heading font-bold mt-2"
                 style={{ background: '#E8FF00' }}
               >
-                <span className="relative z-10">Réserver mon appel gratuit →</span>
+                <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
                 <motion.span
                   className="absolute inset-0 bg-white"
                   initial={{ x: '-105%' }}

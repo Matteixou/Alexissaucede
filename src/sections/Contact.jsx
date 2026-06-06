@@ -194,13 +194,13 @@ export default function Contact() {
           transition={{ duration: 1.6, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
-            Appel découverte offert
+            Bilan personnalisé gratuit
           </p>
           <h2 className="font-marker text-4xl lg:text-5xl text-bone mb-4">
             Parlons de ton projet
           </h2>
           <p className="text-ash max-w-lg mx-auto leading-relaxed text-sm">
-            Premier appel 100% gratuit · Alexis te répond sous 24 h · 500+ personnes coachées
+            Bilan personnalisé 100% gratuit · Alexis te répond sous 24 h · 500+ personnes coachées
           </p>
           <div className="flex items-center justify-center gap-2 mt-6">
             <span className="text-[11px] tracking-[0.12em] text-ash/70">⭐ 5.0 — 42 avis Google</span>

@@ -107,7 +107,7 @@ export default function Navbar() {
               onClick={(e) => { e.preventDefault(); scrollTo('#contact') }}
               className="hidden md:inline-flex items-center px-5 py-2 rounded-lg bg-white text-void text-[11px] tracking-[0.18em] uppercase font-heading font-bold hover:bg-bone transition-colors duration-300"
             >
-              Réserver mon appel gratuit
+              Réserver mon bilan personnalisé gratuit
             </a>
 
             <button
@@ -189,7 +189,7 @@ export default function Navbar() {
                   onClick={(e) => { e.preventDefault(); handleMobileNav('#contact') }}
                   className="flex items-center justify-center w-full py-4 rounded-xl bg-white text-void text-[11px] tracking-[0.22em] uppercase font-heading font-bold hover:bg-bone active:bg-bone transition-colors duration-300"
                 >
-                  Réserver mon appel gratuit
+                  Réserver mon bilan personnalisé gratuit
                 </a>
               </motion.div>
             </motion.div>
