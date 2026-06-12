@@ -3,7 +3,6 @@ import { motion, useScroll } from 'framer-motion'
 import { ArrowDown, Zap } from 'lucide-react'
 import HeroCanvas from './HeroCanvas'
 
-const IS_DESKTOP = typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
 const EASE = [0.16, 1, 0.3, 1]
 const reveal = (delay = 0) => ({
   initial:    { opacity: 0, y: 32 },
@@ -154,18 +153,7 @@ export default function Hero({ onCtaClick }) {
 
               {/* ── Canvas 3D ─────────────────────────────────────────────── */}
               <div className="absolute inset-0" style={{ zIndex: 0 }}>
-                {IS_DESKTOP ? (
-                  <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
-                ) : (
-                  <img
-                    src="/logoalexissaucede.webp"
-                    alt="Alexis Saucede"
-                    className="w-full h-full object-contain"
-                    width="256"
-                    height="256"
-                    loading="eager"
-                  />
-                )}
+                <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
               </div>
 
               {/* ── Badge ─────────────────────────────────────────────────── */}
