@@ -141,34 +141,45 @@ function toShape(pts, W, scale) {
   return sh
 }
 
+// Cache module-level pour éviter de recalculer le même logo plusieurs fois
+const _cache = new Map()
+
 export async function imageToShapes(url, size = 300, scale = 5.8, rdpEps = 1.6) {
-  const img = await new Promise((res, rej) => {
-    const i = new Image()
-    i.onload = () => res(i)
-    i.onerror = rej
-    i.src = url
-  })
-  const mask     = rasterize(img, size)
-  const segs     = marchingSquares(mask, size, size)
-  const raw      = connectSegments(segs)
-  const MIN_AREA = size * size * 0.004
+  const key = `${url}|${size}|${scale}|${rdpEps}`
+  if (_cache.has(key)) return _cache.get(key)
 
-  const polys = raw.map(p => {
-    const first = p[0], last = p[p.length - 1]
-    const clean = (first[0] === last[0] && first[1] === last[1]) ? p.slice(0, -1) : p
-    return rdp(chaikin(clean, 2), rdpEps)
-  }).filter(p => p.length >= 5)
-
-  const outers = polys
-    .filter(p => signedArea(p) < 0)
-    .filter(p => Math.abs(signedArea(p)) > MIN_AREA)
-  const holes = polys.filter(p => signedArea(p) > 0)
-
-  return outers.map(o => {
-    const sh = toShape(o, size, scale)
-    holes.forEach(h => {
-      if (pointInPoly(centroid(h), o)) sh.holes.push(toShape(h, size, scale))
+  const promise = (async () => {
+    const img = await new Promise((res, rej) => {
+      const i = new Image()
+      i.onload = () => res(i)
+      i.onerror = rej
+      i.src = url
     })
-    return sh
-  })
+    const mask     = rasterize(img, size)
+    const segs     = marchingSquares(mask, size, size)
+    const raw      = connectSegments(segs)
+    const MIN_AREA = size * size * 0.004
+
+    const polys = raw.map(p => {
+      const first = p[0], last = p[p.length - 1]
+      const clean = (first[0] === last[0] && first[1] === last[1]) ? p.slice(0, -1) : p
+      return rdp(chaikin(clean, 2), rdpEps)
+    }).filter(p => p.length >= 5)
+
+    const outers = polys
+      .filter(p => signedArea(p) < 0)
+      .filter(p => Math.abs(signedArea(p)) > MIN_AREA)
+    const holes = polys.filter(p => signedArea(p) > 0)
+
+    return outers.map(o => {
+      const sh = toShape(o, size, scale)
+      holes.forEach(h => {
+        if (pointInPoly(centroid(h), o)) sh.holes.push(toShape(h, size, scale))
+      })
+      return sh
+    })
+  })()
+
+  _cache.set(key, promise)
+  return promise
 }

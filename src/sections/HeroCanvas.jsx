@@ -22,28 +22,35 @@ const EXTRUDE = {
   bevelThickness: 0.052,
   bevelSize:      0.032,
   bevelOffset:    0,
-  bevelSegments:  3,
-  curveSegments:  16,
+  bevelSegments:  2,
+  curveSegments:  8,
 }
 
 function ASLogo({ scrollRef, zoomRef }) {
   const groupRef     = useRef()
   const floatT       = useRef(0)
   const currentScale = useRef(1)
+  const mergedGeoRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
-    imageToShapes('/logoalexissaucede.jpg', 300, 4.0).then(shapes => {
+    imageToShapes('/logoalexissaucede.jpg', 256, 4.0).then(shapes => {
       if (cancelled || !groupRef.current) return
       const geos   = shapes.map(sh => new THREE.ExtrudeGeometry(sh, EXTRUDE))
       const merged = mergeGeometries(geos, false)
-      const mesh   = new THREE.Mesh(merged ?? geos[0], chromeMat)
-      if (!merged) geos.slice(1).forEach(g => groupRef.current.add(new THREE.Mesh(g, chromeMat)))
+      geos.forEach(g => g.dispose())
+      mergedGeoRef.current = merged ?? geos[0]
+      const mesh = new THREE.Mesh(mergedGeoRef.current, chromeMat)
       const bbox = new THREE.Box3().setFromObject(mesh)
       mesh.position.sub(bbox.getCenter(new THREE.Vector3()))
       groupRef.current.add(mesh)
     }).catch(console.error)
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      mergedGeoRef.current?.dispose()
+      mergedGeoRef.current = null
+      groupRef.current?.clear()
+    }
   }, [])
 
   useFrame((_, delta) => {
@@ -69,12 +76,12 @@ function ASLogo({ scrollRef, zoomRef }) {
 export default function HeroCanvas({ scrollRef, zoomRef }) {
   return (
     <Canvas
-      dpr={[1, 1]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 4.0], fov: 44 }}
       gl={{
         antialias:             false,
         alpha:                 true,
-        powerPreference:       'high-performance',
+        powerPreference:       'default',
         preserveDrawingBuffer: false,
       }}
       performance={{ min: 0.5 }}

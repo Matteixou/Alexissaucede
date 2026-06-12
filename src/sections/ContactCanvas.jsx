@@ -22,27 +22,34 @@ const EXTRUDE = {
   bevelThickness: 0.04,
   bevelSize:      0.025,
   bevelOffset:    0,
-  bevelSegments:  3,
-  curveSegments:  16,
+  bevelSegments:  2,
+  curveSegments:  8,
 }
 
 function BgLogo() {
-  const groupRef = useRef()
+  const groupRef   = useRef()
+  const mergedGeoRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
-    imageToShapes('/logoalexissaucede.jpg', 300, 9.0).then(shapes => {
+    imageToShapes('/logoalexissaucede.jpg', 200, 9.0).then(shapes => {
       if (cancelled || !groupRef.current) return
       const geos   = shapes.map(sh => new THREE.ExtrudeGeometry(sh, EXTRUDE))
       const merged = mergeGeometries(geos, false)
-      const mesh   = new THREE.Mesh(merged ?? geos[0], mat)
-      if (!merged) geos.slice(1).forEach(g => groupRef.current.add(new THREE.Mesh(g, mat)))
+      geos.forEach(g => g.dispose())
+      mergedGeoRef.current = merged ?? geos[0]
+      const mesh = new THREE.Mesh(mergedGeoRef.current, mat)
       const bbox = new THREE.Box3().setFromObject(mesh)
       mesh.position.sub(bbox.getCenter(new THREE.Vector3()))
       mesh.scale.setScalar(0.65)
       groupRef.current.add(mesh)
     }).catch(console.error)
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      mergedGeoRef.current?.dispose()
+      mergedGeoRef.current = null
+      groupRef.current?.clear()
+    }
   }, [])
 
   useFrame((state, delta) => {
@@ -59,7 +66,7 @@ export default function ContactCanvas() {
     <Canvas
       dpr={[1, 1]}
       camera={{ position: [0, 0, 12], fov: 42 }}
-      gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+      gl={{ antialias: false, alpha: true, powerPreference: 'default' }}
       style={{ width: '100%', height: '100%', display: 'block' }}
     >
       <ambientLight intensity={0.30} color="#FFFFFF" />

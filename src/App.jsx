@@ -42,8 +42,15 @@ export default function App() {
     }
   }, [])
 
-  const scrollToContact = () =>
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  const scrollToContact = () => {
+    const target = document.getElementById('contact')
+    if (!target) return
+    if (window.__lenis) {
+      window.__lenis.scrollTo(target, { duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 4) })
+    } else {
+      target.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-void font-sans antialiased grain-overlay">
@@ -103,7 +110,7 @@ export default function App() {
             <a href="#contact"         className="hover:text-white transition-colors duration-300">Contact</a>
           </div>
 
-          <p className="text-xs text-ash/40">© 2024 Alexis Saucede. Tous droits réservés.</p>
+          <p className="text-xs text-ash/40">© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
         </div>
       </footer>
     </div>
