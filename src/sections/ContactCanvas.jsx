@@ -32,7 +32,7 @@ function BgLogo() {
 
   useEffect(() => {
     let cancelled = false
-    imageToShapes('/logoalexissaucede.jpg', 200, 9.0).then(shapes => {
+    imageToShapes('/logoalexissaucede.webp', 200, 9.0).then(shapes => {
       if (cancelled || !groupRef.current) return
       const geos   = shapes.map(sh => new THREE.ExtrudeGeometry(sh, EXTRUDE))
       const merged = mergeGeometries(geos, false)

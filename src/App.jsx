@@ -61,15 +61,15 @@ export default function App() {
         <Hero onCtaClick={scrollToContact} />
         <Suspense fallback={null}>
           <Transformations />
-          <ParallaxBanner src="/banner 1.png" position="center" />
+          <ParallaxBanner src="/banner 1.webp" position="center" />
           <Presentation />
           <KeyBenefits />
-          <ParallaxBanner src="/banner 2.png" position="left bottom" />
+          <ParallaxBanner src="/banner 2.webp" position="left bottom" />
           <Reviews />
-          <ParallaxBanner src="/banner 3.png" position="center" />
+          <ParallaxBanner src="/banner 3.webp" position="center" />
           <ProductShowcase />
           <Ingredients />
-          <ParallaxBanner src="/banner 4.png" position="right bottom" />
+          <ParallaxBanner src="/banner 4.webp" position="right bottom" />
           <FAQ />
           <Contact />
         </Suspense>
@@ -90,14 +90,17 @@ export default function App() {
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 flex flex-col items-center gap-6">
           {/* Logo */}
-          <img
-            src="/logoalexissaucede.jpg"
-            alt="Alexis Saucede Coaching"
-            className="h-14 w-14 object-contain rounded-xl"
-            width="56"
-            height="56"
-            loading="lazy"
-          />
+          <picture>
+            <source srcSet="/logoalexissaucede.webp" type="image/webp" />
+            <img
+              src="/logoalexissaucede.jpg"
+              alt="Alexis Saucede Coaching"
+              className="h-14 w-14 object-contain rounded-xl"
+              width="56"
+              height="56"
+              loading="lazy"
+            />
+          </picture>
 
           <p className="text-xs tracking-[0.22em] uppercase text-ash text-center">
             Coaching Musculation · Suivi Personnalisé · Méthode Prouvée

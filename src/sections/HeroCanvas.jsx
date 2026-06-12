@@ -34,7 +34,7 @@ function ASLogo({ scrollRef, zoomRef }) {
 
   useEffect(() => {
     let cancelled = false
-    imageToShapes('/logoalexissaucede.jpg', 256, 4.0).then(shapes => {
+    imageToShapes('/logoalexissaucede.webp', 256, 4.0).then(shapes => {
       if (cancelled || !groupRef.current) return
       const geos   = shapes.map(sh => new THREE.ExtrudeGeometry(sh, EXTRUDE))
       const merged = mergeGeometries(geos, false)

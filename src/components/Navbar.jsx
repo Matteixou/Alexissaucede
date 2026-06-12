@@ -78,13 +78,16 @@ export default function Navbar() {
 
           {/* Logo */}
           <a href="/" className="flex items-center select-none" onClick={close}>
-            <img
-              src="/logoalexissaucede.jpg"
-              alt="Alexis Saucede Coaching"
-              className="h-11 w-11 object-contain rounded-lg"
-              width="44"
-              height="44"
-            />
+            <picture>
+              <source srcSet="/logoalexissaucede.webp" type="image/webp" />
+              <img
+                src="/logoalexissaucede.jpg"
+                alt="Alexis Saucede Coaching"
+                className="h-11 w-11 object-contain rounded-lg"
+                width="44"
+                height="44"
+              />
+            </picture>
           </a>
 
           {/* Navigation desktop */}

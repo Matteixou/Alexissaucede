@@ -19,7 +19,7 @@ export default {
         lava:     '#8B0000',
         spark:    '#E85D04',
         bone:     '#D4D4DC',
-        ash:      '#5A5A6E',
+        ash:      '#7A7A8E',
         ghost:    '#2A2A38',
         steel:    '#3A3A4A',
         chrome:   '#7A7A8E',
