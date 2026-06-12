@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const QUESTIONS = [
   {
@@ -99,10 +99,10 @@ export default function FAQ() {
         {/* En-tête */}
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Questions fréquentes
@@ -115,10 +115,10 @@ export default function FAQ() {
         {/* Accordéon */}
         <motion.div
           className="border-t border-steel/40"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE, delay: 0.15 }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
         >
           {QUESTIONS.map((item) => (
             <FAQItem

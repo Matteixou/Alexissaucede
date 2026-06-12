@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Check, MessageCircle, MapPin, Monitor, Zap } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const PLAN_PRESENTIEL = {
   id:        'presentiel',
@@ -67,10 +67,10 @@ const PLANS_ONLINE = [
 function PlanCard({ plan, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
-      transition={{ duration: 1.6, ease: EASE, delay: index * 0.08 }}
+      transition={{ duration: 0.9, ease: EASE, delay: index * 0.08 }}
       className={`relative flex flex-col rounded-xl border transition-all duration-500 overflow-hidden ${
         plan.highlight
           ? 'border-white/40 shadow-ember-glow bg-obsidian'
@@ -193,10 +193,10 @@ export default function ProductShowcase() {
         {/* En-tête */}
         <motion.div
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Investissez dans votre physique

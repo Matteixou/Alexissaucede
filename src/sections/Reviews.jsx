@@ -4,7 +4,7 @@ import { Star, ChevronDown } from 'lucide-react'
 import useGoogleReviews from '../hooks/useGoogleReviews'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const STATIC_REVIEWS = [
   {
@@ -72,10 +72,10 @@ function ReviewCard({ review, index }) {
   return (
     <motion.div
       className="flex flex-col rounded-xl border border-steel/40 hover:border-white/20 bg-obsidian/60 transition-colors duration-500 hover:shadow-ember-sm overflow-hidden"
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
-      transition={{ duration: 1.6, ease: EASE, delay: index * 0.08 }}
+      transition={{ duration: 0.9, ease: EASE, delay: index * 0.08 }}
     >
       {/* Partie toujours visible */}
       <div className="flex flex-col gap-3 p-5">
@@ -175,10 +175,10 @@ export default function Reviews() {
 
         <motion.div
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Ce qu'ils disent

@@ -3,6 +3,7 @@ import { motion, useScroll } from 'framer-motion'
 import { ArrowDown, Zap } from 'lucide-react'
 import HeroCanvas from './HeroCanvas'
 
+const IS_DESKTOP = typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
 const EASE = [0.16, 1, 0.3, 1]
 const reveal = (delay = 0) => ({
   initial:    { opacity: 0, y: 32 },
@@ -32,7 +33,7 @@ export default function Hero({ onCtaClick }) {
         <div className="grid lg:grid-cols-[1fr_1.15fr] gap-10 lg:gap-20 items-center">
 
           {/* ─── Colonne texte ─────────────────────────────────────────────── */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1">
 
             <motion.div {...reveal(0.2)} className="inline-flex items-center gap-2.5 mb-10">
               <Zap size={12} strokeWidth={1.5} className="text-white" />
@@ -117,7 +118,7 @@ export default function Hero({ onCtaClick }) {
           </div>
 
           {/* ─── Colonne 3D ──────────────────────────────────────────────────── */}
-          <div className="order-1 lg:order-2">
+          <div className="order-2">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -153,7 +154,18 @@ export default function Hero({ onCtaClick }) {
 
               {/* ── Canvas 3D ─────────────────────────────────────────────── */}
               <div className="absolute inset-0" style={{ zIndex: 0 }}>
-                <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
+                {IS_DESKTOP ? (
+                  <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
+                ) : (
+                  <img
+                    src="/logoalexissaucede.webp"
+                    alt="Alexis Saucede"
+                    className="w-full h-full object-contain"
+                    width="256"
+                    height="256"
+                    loading="eager"
+                  />
+                )}
               </div>
 
               {/* ── Badge ─────────────────────────────────────────────────── */}

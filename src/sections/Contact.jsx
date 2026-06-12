@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Instagram, Mail, MapPin, Phone, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react'
 import ContactCanvas from './ContactCanvas'
 
+const IS_DESKTOP = typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
 const EASE = [0.16, 1, 0.3, 1]
 
 const SOCIALS = [
@@ -175,9 +176,11 @@ export default function Contact() {
   return (
     <section id="contact" className="relative py-28 px-6 lg:px-10 bg-obsidian border-t border-steel/40">
 
-      <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
-        <ContactCanvas />
-      </div>
+      {IS_DESKTOP && (
+        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
+          <ContactCanvas />
+        </div>
+      )}
       <div
         className="absolute inset-0 pointer-events-none select-none"
         style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, #111118 100%)' }}
@@ -188,10 +191,10 @@ export default function Contact() {
 
         <motion.div
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '80px' }}
-          transition={{ duration: 1.6, ease: EASE }}
+          viewport={{ once: true, margin: '200px' }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Bilan personnalisé gratuit
@@ -214,10 +217,10 @@ export default function Contact() {
           {/* ── Colonne gauche ───────────────────────────────────────────── */}
           <motion.div
             className="flex flex-col gap-10"
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '80px' }}
-            transition={{ duration: 1.6, ease: EASE, delay: 0.15 }}
+            viewport={{ once: true, margin: '200px' }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
           >
             <div>
               <p className="text-[10px] tracking-[0.22em] uppercase text-ash mb-5 font-heading">
@@ -276,10 +279,10 @@ export default function Contact() {
 
           {/* ── Colonne droite : questionnaire ──────────────────────────── */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '80px' }}
-            transition={{ duration: 1.6, ease: EASE, delay: 0.3 }}
+            viewport={{ once: true, margin: '200px' }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
           >
             <div className="bg-shadow/30 border border-steel/40 rounded-2xl p-7 lg:p-9">
               <p className="text-[11px] tracking-[0.18em] uppercase text-white/70 mb-7 font-sans font-medium">

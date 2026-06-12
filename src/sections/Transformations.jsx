@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronsLeftRight, Quote } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const TRANSFORMATIONS = [
   {
@@ -197,10 +197,10 @@ function TransformationCard({ t, i }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
-      transition={{ duration: 1.6, ease: EASE, delay: i * 0.08 }}
+      transition={{ duration: 0.9, ease: EASE, delay: i * 0.08 }}
       className="group flex flex-col rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 transition-colors duration-500 bg-obsidian/60 hover:shadow-ember-sm"
     >
       <ComparisonSlider before={t.before} after={t.after} name={t.name} hintIndex={i} />
@@ -329,10 +329,10 @@ export default function Transformations() {
 
         <motion.div
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Ils ont transformé leur physique

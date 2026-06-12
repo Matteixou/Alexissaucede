@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Award, Clock, Users } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const STATS = [
   { icon: Clock,  value: '8 ans',  label: "d'expérience" },
@@ -42,10 +42,10 @@ export default function Presentation() {
           {/* ── Colonne photo ────────────────────────────────────────────── */}
           <motion.div
             className="relative"
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={VP}
-            transition={{ duration: 1.6, ease: EASE }}
+            transition={{ duration: 0.9, ease: EASE }}
           >
             {/* Placeholder photo — remplacer src par la vraie photo d'Alexis */}
             <div className="relative rounded-2xl overflow-hidden border border-steel/40 aspect-[3/4] max-w-sm mx-auto lg:max-w-none bg-shadow">
@@ -87,10 +87,10 @@ export default function Presentation() {
 
           {/* ── Colonne texte ────────────────────────────────────────────── */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={VP}
-            transition={{ duration: 1.6, ease: EASE, delay: 0.08 }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.08 }}
           >
             <p className="text-[11px] tracking-[0.28em] uppercase mb-5 font-heading" style={{ color: '#E8FF00' }}>
               Qui est Alexis ?

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Target, Dumbbell, TrendingUp } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const BENEFITS = [
   {
@@ -58,10 +58,10 @@ export default function KeyBenefits() {
       <div className="relative max-w-7xl mx-auto">
 
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
           className="text-center mb-20"
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
@@ -78,10 +78,10 @@ export default function KeyBenefits() {
             return (
               <motion.div
                 key={b.title}
-                initial={{ opacity: 0, y: 60 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VP}
-                transition={{ duration: 1.6, ease: EASE, delay: i * 0.1 }}
+                transition={{ duration: 0.9, ease: EASE, delay: i * 0.1 }}
                 className="group flex flex-col items-center text-center px-10 py-12 rounded-xl border border-steel/40 hover:border-white/20 hover:shadow-ember-sm transition-all duration-500 bg-obsidian/60"
               >
                 <div className="w-14 h-14 rounded-full bg-shadow flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors duration-500 border border-steel/40">

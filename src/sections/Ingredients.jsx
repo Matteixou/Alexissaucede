@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Plus, X } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
-const VP   = { once: true, margin: '80px' }
+const VP   = { once: true, margin: '200px' }
 
 const MODULES = [
   {
@@ -65,10 +65,10 @@ export default function Ingredients() {
         {/* En-tête */}
         <motion.div
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VP}
-          transition={{ duration: 1.6, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className="text-[11px] tracking-[0.28em] uppercase mb-4" style={{ color: '#E8FF00' }}>
             Ce qui est inclus
@@ -89,10 +89,10 @@ export default function Ingredients() {
             return (
               <motion.article
                 key={module.id}
-                initial={{ opacity: 0, y: 60 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VP}
-                transition={{ duration: 1.6, ease: EASE, delay: i * 0.15 }}
+                transition={{ duration: 0.9, ease: EASE, delay: i * 0.15 }}
                 onClick={() => toggle(module.id)}
                 className="group rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 hover:shadow-ember-sm transition-all duration-500 bg-obsidian/60 cursor-pointer"
               >
