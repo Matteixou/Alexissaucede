@@ -55,6 +55,9 @@ export default function Presentation() {
                   src="/alexis.jpeg"
                   alt="Alexis Saucede Coach"
                   className="w-full h-full object-cover"
+                  width="400"
+                  height="533"
+                  fetchpriority="high"
                 />
               </div>
               {/* Dégradé bas */}

@@ -82,6 +82,8 @@ export default function Navbar() {
               src="/logoalexissaucede.jpg"
               alt="Alexis Saucede Coaching"
               className="h-11 w-11 object-contain rounded-lg"
+              width="44"
+              height="44"
             />
           </a>
 

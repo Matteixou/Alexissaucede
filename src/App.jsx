@@ -94,6 +94,9 @@ export default function App() {
             src="/logoalexissaucede.jpg"
             alt="Alexis Saucede Coaching"
             className="h-14 w-14 object-contain rounded-xl"
+            width="56"
+            height="56"
+            loading="lazy"
           />
 
           <p className="text-xs tracking-[0.22em] uppercase text-ash text-center">
