@@ -30,7 +30,7 @@ export default function KeyBenefits() {
     <section id="methode" className="relative py-28 px-6 lg:px-10 bg-abyss">
 
       <div className="absolute right-6 top-4 pointer-events-none select-none overflow-hidden" aria-hidden="true">
-        <span className="font-display font-black italic text-[11rem] lg:text-[16rem] leading-none text-white/[0.04]">01</span>
+        <span className="font-display font-black italic text-[11rem] lg:text-[16rem] leading-none text-white/[0.04]">02</span>
       </div>
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
