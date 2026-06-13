@@ -1,7 +1,9 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, lazy, Suspense } from 'react'
 import { motion, useScroll } from 'framer-motion'
 import { ArrowDown, Zap } from 'lucide-react'
-import HeroCanvas from './HeroCanvas'
+
+// Three.js chargé dans un chunk séparé — ne bloque pas le rendu du texte Hero
+const HeroCanvas = lazy(() => import('./HeroCanvas'))
 
 const EASE = [0.16, 1, 0.3, 1]
 const reveal = (delay = 0) => ({
@@ -151,9 +153,11 @@ export default function Hero({ onCtaClick }) {
                 <rect x="14"  y="30"  width="16" height="16" rx="0" fill="none" stroke="#3A3A4A" strokeWidth="0.6" strokeOpacity="0.35" />
               </svg>
 
-              {/* ── Canvas 3D ─────────────────────────────────────────────── */}
+              {/* ── Canvas 3D — chargé après le texte (code splitting) ─── */}
               <div className="absolute inset-0" style={{ zIndex: 0 }}>
-                <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
+                <Suspense fallback={null}>
+                  <HeroCanvas scrollRef={scrollRef} zoomRef={zoomRef} />
+                </Suspense>
               </div>
 
               {/* ── Badge ─────────────────────────────────────────────────── */}

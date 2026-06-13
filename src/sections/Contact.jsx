@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Instagram, Mail, MapPin, Phone, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react'
-import ContactCanvas from './ContactCanvas'
+
+const ContactCanvas = lazy(() => import('./ContactCanvas'))
 
 const EASE = [0.16, 1, 0.3, 1]
 
@@ -175,9 +176,11 @@ export default function Contact() {
   return (
     <section id="contact" className="relative py-28 px-6 lg:px-10 bg-obsidian border-t border-steel/40">
 
-      <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
-        <ContactCanvas />
-      </div>
+      <Suspense fallback={null}>
+        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
+          <ContactCanvas />
+        </div>
+      </Suspense>
       <div
         className="absolute inset-0 pointer-events-none select-none"
         style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, #111118 100%)' }}

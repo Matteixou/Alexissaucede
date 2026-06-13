@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Shape } from 'three'
 
 function rasterize(img, size, threshold = 110) {
   const c = Object.assign(document.createElement('canvas'), { width: size, height: size })
@@ -130,7 +130,7 @@ function pointInPoly([tx, ty], poly) {
 function toShape(pts, W, scale) {
   const norm = ([x, y]) => [(x / W - .5) * scale, (y / W - .5) * -scale]
   const rev  = [...pts].reverse()
-  const sh   = new THREE.Shape()
+  const sh   = new Shape()
   const [fx, fy] = norm(rev[0])
   sh.moveTo(fx, fy)
   for (let i = 1; i < rev.length; i++) {
