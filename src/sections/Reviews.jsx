@@ -68,7 +68,7 @@ function normalizeApiReview(r, i) {
 function ReviewCard({ review, index }) {
   return (
     <motion.div
-      className="flex flex-col rounded-xl border border-steel/40 hover:border-white/20 bg-obsidian/60 transition-colors duration-500 hover:shadow-ember-sm overflow-hidden"
+      className="flex flex-col h-full rounded-xl border border-steel/40 hover:border-white/20 bg-obsidian/60 transition-colors duration-500 hover:shadow-ember-sm overflow-hidden"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
@@ -85,7 +85,7 @@ function ReviewCard({ review, index }) {
 
         <Stars count={review.rating} />
 
-        <p className="text-xs text-ash leading-relaxed mt-1">
+        <p className="text-xs text-ash leading-relaxed mt-1 line-clamp-5">
           "{review.text}"
         </p>
       </div>
@@ -174,13 +174,13 @@ export default function Reviews() {
         </motion.div>
 
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="h-32 rounded-xl border border-steel/40 bg-obsidian/60 animate-pulse" />
             ))}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
             {reviews.map((review, i) => (
               <ReviewCard key={review.id} review={review} index={i} />
             ))}
