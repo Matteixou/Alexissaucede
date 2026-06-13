@@ -214,21 +214,19 @@ function TransformationCard({ t, i }) {
         </p>
       </div>
 
-      {/* Témoignage affiché directement */}
-      {t.comment && (
-        <div className="relative px-4 sm:px-5 pt-4 pb-5 bg-[#E8FF00]/[0.03]">
-          <span
-            aria-hidden="true"
-            className="absolute top-2 left-3 font-display text-5xl leading-none select-none pointer-events-none"
-            style={{ color: 'rgba(232,255,0,0.12)' }}
-          >
-            "
-          </span>
-          <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2 line-clamp-5">
-            {t.comment}
-          </p>
-        </div>
-      )}
+      {/* Témoignage affiché directement — hauteur fixe pour égaliser toutes les cartes */}
+      <div className="relative px-4 sm:px-5 pt-4 pb-5 bg-[#E8FF00]/[0.03] h-[88px] overflow-hidden flex-shrink-0">
+        <span
+          aria-hidden="true"
+          className="absolute top-2 left-3 font-display text-5xl leading-none select-none pointer-events-none"
+          style={{ color: 'rgba(232,255,0,0.12)' }}
+        >
+          "
+        </span>
+        <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2 line-clamp-3">
+          {t.comment || ''}
+        </p>
+      </div>
     </motion.div>
   )
 }
