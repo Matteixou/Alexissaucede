@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Star, ChevronDown } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Star } from 'lucide-react'
 import useGoogleReviews from '../hooks/useGoogleReviews'
 
 const EASE = [0.16, 1, 0.3, 1]
@@ -67,8 +66,6 @@ function normalizeApiReview(r, i) {
 }
 
 function ReviewCard({ review, index }) {
-  const [open, setOpen] = useState(false)
-
   return (
     <motion.div
       className="flex flex-col rounded-xl border border-steel/40 hover:border-white/20 bg-obsidian/60 transition-colors duration-500 hover:shadow-ember-sm overflow-hidden"
@@ -77,8 +74,7 @@ function ReviewCard({ review, index }) {
       viewport={VP}
       transition={{ duration: 0.9, ease: EASE, delay: index * 0.08 }}
     >
-      {/* Partie toujours visible */}
-      <div className="flex flex-col gap-3 p-5">
+      <div className="flex flex-col gap-3 p-5 flex-1">
         <div className="flex items-center gap-3">
           <InitialAvatar name={review.name} />
           <div>
@@ -88,48 +84,20 @@ function ReviewCard({ review, index }) {
         </div>
 
         <Stars count={review.rating} />
+
+        <p className="text-xs text-ash leading-relaxed mt-1">
+          "{review.text}"
+        </p>
       </div>
 
-      {/* Bouton extensible */}
-      <button
-        onClick={() => setOpen(v => !v)}
-        className="flex items-center justify-between gap-2 px-5 py-3 border-t border-steel/30 text-[10px] tracking-[0.18em] uppercase text-ash hover:text-bone transition-colors duration-200 group"
-      >
-        <span>{open ? 'Masquer' : 'Lire le commentaire'}</span>
-        <ChevronDown
-          size={13}
-          className="transition-transform duration-300"
-          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
-        />
-      </button>
-
-      {/* Texte dépliable */}
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="text"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="px-5 pb-5 flex flex-col gap-3">
-              <p className="text-xs text-ash leading-relaxed">
-                "{review.text}"
-              </p>
-              <div className="flex items-center gap-1.5 pt-2 border-t border-steel/30">
-                <div className="w-4 h-4 rounded-full bg-white flex items-center justify-center">
-                  <span className="font-heading font-black text-[8px] text-void leading-none">G</span>
-                </div>
-                <span className="text-[9px] tracking-[0.15em] uppercase text-steel font-heading">
-                  Avis Google
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="flex items-center gap-1.5 px-5 py-3 border-t border-steel/30">
+        <div className="w-4 h-4 rounded-full bg-white flex items-center justify-center">
+          <span className="font-heading font-black text-[8px] text-void leading-none">G</span>
+        </div>
+        <span className="text-[9px] tracking-[0.15em] uppercase text-steel font-heading">
+          Avis Google
+        </span>
+      </div>
     </motion.div>
   )
 }

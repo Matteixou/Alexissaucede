@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronsLeftRight, Quote } from 'lucide-react'
+import { useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { ChevronsLeftRight } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
@@ -193,20 +193,18 @@ function ComparisonSlider({ before, after, name, hintIndex = 0 }) {
 }
 
 function TransformationCard({ t, i }) {
-  const [open, setOpen] = useState(false)
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
       transition={{ duration: 0.9, ease: EASE, delay: i * 0.08 }}
-      className="group flex flex-col rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 transition-colors duration-500 bg-obsidian/60 hover:shadow-ember-sm"
+      className="flex flex-col rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 transition-colors duration-500 bg-obsidian/60 hover:shadow-ember-sm"
     >
       <ComparisonSlider before={t.before} after={t.after} name={t.name} hintIndex={i} />
 
       {/* Nom + résultat */}
-      <div className="px-3 py-3 sm:px-5 sm:py-4 flex flex-wrap items-center justify-between gap-1 sm:gap-2">
+      <div className="px-3 py-3 sm:px-5 sm:py-4 flex flex-wrap items-center justify-between gap-1 sm:gap-2 border-b border-steel/30">
         <p className="text-xs sm:text-sm font-heading font-semibold text-bone">{t.name}</p>
         <p
           className="font-marker text-xs sm:text-sm text-right"
@@ -216,81 +214,21 @@ function TransformationCard({ t, i }) {
         </p>
       </div>
 
-      <div className="mt-auto">
-        {/* Bouton */}
-        <button
-          disabled={!t.comment}
-          onClick={() => t.comment && setOpen(v => !v)}
-          className={`w-full flex items-center gap-3 px-4 sm:px-5 py-3 border-t transition-all duration-300 ${
-            !t.comment
-              ? 'border-steel/20 opacity-40 cursor-default'
-              : open
-                ? 'border-[#E8FF00]/25 bg-[#E8FF00]/[0.06] cursor-pointer'
-                : 'border-steel/30 hover:bg-white/[0.03] cursor-pointer'
-          }`}
-        >
+      {/* Témoignage affiché directement */}
+      {t.comment && (
+        <div className="relative px-4 sm:px-5 pt-4 pb-5 bg-[#E8FF00]/[0.03]">
           <span
-            className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-              open && t.comment ? 'bg-[#E8FF00]/20' : 'bg-steel/20'
-            }`}
+            aria-hidden="true"
+            className="absolute top-2 left-3 font-display text-5xl leading-none select-none pointer-events-none"
+            style={{ color: 'rgba(232,255,0,0.12)' }}
           >
-            <Quote
-              size={12}
-              className={`transition-colors duration-300 ${open && t.comment ? 'text-[#E8FF00]' : 'text-ash'}`}
-            />
+            "
           </span>
-
-          <span
-            className={`flex-1 text-left text-[9px] tracking-[0.2em] uppercase font-heading transition-colors duration-300 ${
-              !t.comment
-                ? 'text-steel/50'
-                : open
-                  ? 'text-[#E8FF00]'
-                  : 'text-ash group-hover:text-bone'
-            }`}
-          >
-            {!t.comment ? 'Témoignage à venir' : open ? 'Masquer' : 'Témoignage'}
-          </span>
-
-          {t.comment && (
-            <motion.span
-              animate={{ rotate: open ? 180 : 0 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className={`flex-shrink-0 transition-colors duration-300 ${open ? 'text-[#E8FF00]' : 'text-steel'}`}
-            >
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.span>
-          )}
-        </button>
-
-        {/* Texte dépliable */}
-        <AnimatePresence initial={false}>
-          {open && t.comment && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              className="overflow-hidden"
-            >
-              <div className="relative px-4 sm:px-5 pt-4 pb-5 bg-[#E8FF00]/[0.03] border-t border-[#E8FF00]/10">
-                <span
-                  aria-hidden="true"
-                  className="absolute top-2 left-3 font-display text-5xl leading-none select-none pointer-events-none"
-                  style={{ color: 'rgba(232,255,0,0.12)' }}
-                >
-                  "
-                </span>
-                <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2">
-                  {t.comment}
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2">
+            {t.comment}
+          </p>
+        </div>
+      )}
     </motion.div>
   )
 }
