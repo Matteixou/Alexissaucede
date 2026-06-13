@@ -199,7 +199,7 @@ function TransformationCard({ t, i }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VP}
       transition={{ duration: 0.9, ease: EASE, delay: i * 0.08 }}
-      className="flex flex-col rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 transition-colors duration-500 bg-obsidian/60 hover:shadow-ember-sm"
+      className="flex flex-col h-full rounded-xl overflow-hidden border border-steel/40 hover:border-white/20 transition-colors duration-500 bg-obsidian/60 hover:shadow-ember-sm"
     >
       <ComparisonSlider before={t.before} after={t.after} name={t.name} hintIndex={i} />
 
@@ -224,7 +224,7 @@ function TransformationCard({ t, i }) {
           >
             "
           </span>
-          <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2">
+          <p className="relative text-[11px] text-ash/90 leading-relaxed pl-2 line-clamp-5">
             {t.comment}
           </p>
         </div>
@@ -283,7 +283,7 @@ export default function Transformations() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 items-start">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 items-stretch">
           {TRANSFORMATIONS.map((t, i) => (
             <TransformationCard key={t.id} t={t} i={i} />
           ))}
