@@ -1,4 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
+import { Routes, Route, Link } from 'react-router-dom'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import CustomCursor from './components/CustomCursor'
@@ -13,6 +14,7 @@ const ProductShowcase  = lazy(() => import('./sections/ProductShowcase'))
 const Ingredients      = lazy(() => import('./sections/Ingredients'))
 const FAQ              = lazy(() => import('./sections/FAQ'))
 const Contact          = lazy(() => import('./sections/Contact'))
+const MentionsLegales  = lazy(() => import('./pages/MentionsLegales'))
 
 export default function App() {
 
@@ -52,7 +54,7 @@ export default function App() {
     }
   }
 
-  return (
+  const MainPage = (
     <div className="min-h-screen bg-void font-sans antialiased grain-overlay">
       <CustomCursor />
       <Navbar />
@@ -89,7 +91,6 @@ export default function App() {
         </svg>
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 flex flex-col items-center gap-6">
-          {/* Logo */}
           <picture>
             <source srcSet="/logoalexissaucede.webp" type="image/webp" />
             <img
@@ -116,9 +117,24 @@ export default function App() {
             <a href="#contact"         className="hover:text-white transition-colors duration-300">Contact</a>
           </div>
 
-          <p className="text-xs text-ash/40">© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
+          <div className="flex items-center gap-2 text-xs text-ash/40">
+            <p>© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
+            <span>·</span>
+            <Link to="/mentions-legales" className="hover:text-ash transition-colors duration-300">
+              Mentions légales
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
+  )
+
+  return (
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={MainPage} />
+        <Route path="/mentions-legales" element={<MentionsLegales />} />
+      </Routes>
+    </Suspense>
   )
 }
