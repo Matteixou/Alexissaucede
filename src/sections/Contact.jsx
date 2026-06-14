@@ -354,7 +354,7 @@ export default function Contact() {
                     </div>
 
                     {/* Age + Taille + Poids */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 min-[420px]:grid-cols-3 gap-4">
                       <Field label="Âge" optional>
                         <input type="number" min="10" max="99" placeholder="25" value={form.age} onChange={set('age')} className={inputClass} />
                       </Field>

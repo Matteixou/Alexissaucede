@@ -1,14 +1,40 @@
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Award, Clock, Users } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
 
 const STATS = [
-  { icon: Clock,  value: '8 ans',  label: "d'expérience" },
-  { icon: Users,  value: '+500',   label: 'personnes accompagnées' },
-  { icon: Award,  value: '99%',    label: 'résultats durables' },
+  { icon: Clock,  num: 8,   prefix: '',  suffix: ' ans', label: "d'expérience" },
+  { icon: Users,  num: 500, prefix: '+', suffix: '',      label: 'personnes accompagnées' },
+  { icon: Award,  num: 99,  prefix: '',  suffix: '%',     label: 'résultats durables' },
 ]
+
+function CountUp({ num, prefix = '', suffix = '' }) {
+  const ref  = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const duration = 1400
+    const startTime = performance.now()
+    const tick = (now) => {
+      const p = Math.min((now - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setCount(Math.round(eased * num))
+      if (p < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [inView, num])
+
+  return (
+    <span ref={ref}>
+      {prefix}{count}{suffix}
+    </span>
+  )
+}
 
 export default function Presentation() {
   return (
@@ -144,11 +170,11 @@ export default function Presentation() {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 pt-8 border-t border-steel/40">
-              {STATS.map(({ icon: Icon, value, label }) => (
+              {STATS.map(({ icon: Icon, num, prefix, suffix, label }) => (
                 <div key={label} className="flex flex-col items-start gap-2">
                   <Icon size={16} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
                   <p className="font-marker text-2xl sm:text-3xl" style={{ color: '#E8FF00', textShadow: '0 0 14px rgba(232,255,0,0.28)' }}>
-                    {value}
+                    <CountUp num={num} prefix={prefix} suffix={suffix} />
                   </p>
                   <p className="text-[10px] tracking-[0.15em] uppercase text-ash leading-snug">{label}</p>
                 </div>

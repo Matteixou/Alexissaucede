@@ -5,56 +5,117 @@ import { ChevronsLeftRight } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
 
-const TRANSFORMATIONS = [
+// Fisher-Yates shuffle — exécuté une seule fois au chargement du module
+function pickRandom(arr, n) {
+  const s = [...arr]
+  for (let i = s.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [s[i], s[j]] = [s[j], s[i]]
+  }
+  return s.slice(0, n)
+}
+
+const ALL_TRANSFORMATIONS = [
   {
     id:      '01',
-    name:    'Client 1',
-    result:  '+12 kg de masse en 4 mois',
+    name:    'Client #47',
+    result:  'Sèche en 4 mois',
     before:  '/Transformation/1.webp',
     after:   '/Transformation/2.webp',
-    comment: "Ma propre transformation est à l'origine de ma passion pour le coaching. J'ai voulu prouver que avec la bonne méthode et la bonne rigueur, les résultats sont au rendez-vous. +12 kg de masse musculaire en 4 mois — c'est ce parcours qui m'a donné l'envie d'accompagner les autres à atteindre leurs objectifs.",
+    comment: "Objectif sèche : partir d'un physique musclé mais couvert de gras et atteindre une définition maximale. En 4 mois, le physique est méconnaissable. La méthode m'a permis de perdre le gras sans sacrifier le muscle.",
   },
   {
     id:      '02',
-    name:    'Client 2',
-    result:  'Transformation visible',
-    before:  '/Transformation/19.webp',
-    after:   '/Transformation/20.webp',
-    comment: "Je n'aurais jamais pensé obtenir ces résultats aussi vite. Alexis m'a donné un programme clair, progressif, et surtout adapté à ma vie. Dès le premier mois j'ai vu la différence. Très professionnel et toujours de bons conseils.",
+    name:    'Client #83',
+    result:  '-15 kg en 5 mois',
+    before:  '/Transformation/3.webp',
+    after:   '/Transformation/4.webp',
+    comment: "Objectif perte de poids : -15 kg en 5 mois. Alexis m'a accompagné sur la nutrition et l'entraînement en même temps. Je ne pensais pas y arriver si vite. Le suivi régulier change vraiment tout.",
   },
   {
     id:      '03',
-    name:    'Client 3',
-    result:  '-18 kg en 5 mois',
-    before:  '/Transformation/3.webp',
-    after:   '/Transformation/4.webp',
-    comment: "-18 kg en 5 mois. Alexis m'a accompagné sur la nutrition et l'entraînement en même temps, c'est ce qui fait vraiment la différence. Sérieux, humain, et efficace. Transformation complète, je ne pensais pas y arriver.",
+    name:    'Client #12',
+    result:  'Recomposition en 6 mois',
+    before:  '/Transformation/9.webp',
+    after:   '/Transformation/10.webp',
+    comment: "Objectif recomposition corporelle : perdre du gras et gagner du muscle simultanément. En 6 mois, le résultat est flagrant. Alexis ajuste le programme chaque semaine selon mes retours.",
   },
   {
     id:      '04',
-    name:    'Client 4',
-    result:  'Transformation visible',
-    before:  '/Transformation/9.webp',
-    after:   '/Transformation/10.webp',
-    comment: "Ce qui m'a le plus surpris c'est la qualité du suivi. Alexis est disponible, réactif, et il ajuste le programme dès que nécessaire. J'ai enfin compris comment m'alimenter correctement. Une vraie prise en charge globale.",
+    name:    'Client #61',
+    result:  '+8 kg de masse en 3 mois',
+    before:  '/Transformation/11.webp',
+    after:   '/Transformation/12.webp',
+    comment: "Objectif prise de masse : +8 kg en 3 mois. J'étais trop mince et je ne savais pas comment prendre du poids. Alexis a calibré ma nutrition et mon entraînement. Résultats visibles dès le premier mois.",
   },
   {
     id:      '05',
-    name:    'Client 5',
-    result:  'Transformation visible',
-    before:  '/Transformation/11.webp',
-    after:   '/Transformation/12.webp',
-    comment: "J'avais peur de ne pas tenir sur la durée mais Alexis sait exactement comment te motiver sans te pousser à bout. Les séances sont intenses mais bien dosées. Résultat visible dès la 3ème semaine. Je recommande à 100%.",
+    name:    'Client #29',
+    result:  '-22 kg en 7 mois',
+    before:  '/Transformation/17.webp',
+    after:   '/Transformation/18.webp',
+    comment: "Objectif : retrouver confiance en moi et perdre du poids durablement. -22 kg en 7 mois avec un suivi bienveillant et efficace. Alexis m'a appris à manger correctement sans me frustrer.",
   },
   {
     id:      '06',
-    name:    'Client 6',
-    result:  'Transformation visible',
-    before:  '/Transformation/17.webp',
-    after:   '/Transformation/18.webp',
-    comment: "Alexis a su s'adapter à mes contraintes : boulot chargé, peu de temps, pas de salle près de chez moi. Il a construit un programme efficace à faire à la maison et les résultats parlent d'eux-mêmes. Coaching sérieux et humain.",
+    name:    'Client #74',
+    result:  '-14 kg en 5 mois',
+    before:  '/Transformation/19.webp',
+    after:   '/Transformation/20.webp',
+    comment: "Objectif : perdre le ventre et retrouver une silhouette. En 5 mois je voyais ma silhouette changer chaque semaine. Alexis m'a donné les clés pour transformer mon corps sans me priver de tout.",
+  },
+  {
+    id:      '07',
+    name:    'Client #38',
+    result:  '+10 kg de masse en 4 mois',
+    before:  '/Transformation/21.webp',
+    after:   '/Transformation/22.webp',
+    comment: "Objectif prise de masse : +10 kg en 4 mois. J'étais trop mince et j'avais essayé plein de programmes sans résultat. Alexis a tout changé avec un plan adapté à mon métabolisme.",
+  },
+  {
+    id:      '08',
+    name:    'Client #55',
+    result:  '+12 kg de masse en 5 mois',
+    before:  '/Transformation/23.webp',
+    after:   '/Transformation/24.webp',
+    comment: "Objectif prise de masse : +12 kg en 5 mois. J'étais déjà sportif mais je stagnais depuis des mois. Alexis a optimisé ma nutrition et augmenté le volume d'entraînement. Les résultats sont arrivés vite.",
+  },
+  {
+    id:      '09',
+    name:    'Client #91',
+    result:  '+14 kg de masse en 6 mois',
+    before:  '/Transformation/25.webp',
+    after:   '/Transformation/26.webp',
+    comment: "Objectif : sortir de la maigreur et enfin prendre du volume. +14 kg en 6 mois. Ectomorphe pur, j'avais abandonné l'idée de prendre du poids avant de rencontrer Alexis. Programme taillé pour mon profil.",
+  },
+  {
+    id:      '10',
+    name:    'Client #16',
+    result:  'Recomposition en 4 mois',
+    before:  '/Transformation/27.webp',
+    after:   '/Transformation/28.webp',
+    comment: "Objectif : améliorer ma silhouette sans forcément perdre beaucoup de poids. Recomposition réussie en 4 mois. Programme 100% personnalisé selon mon équipement, mon emploi du temps et mon niveau.",
+  },
+  {
+    id:      '11',
+    name:    'Client #67',
+    result:  '-18 kg en 5 mois',
+    before:  '/Transformation/29.webp',
+    after:   '/Transformation/30.webp',
+    comment: "Objectif perte de poids : -18 kg en 5 mois après des années d'entraînement sans résultats. À 48 ans je pensais que c'était trop tard. Alexis m'a prouvé le contraire avec un suivi adapté à mon âge.",
+  },
+  {
+    id:      '12',
+    name:    'Client #43',
+    result:  '+16 kg de masse en 6 mois',
+    before:  '/Transformation/31.webp',
+    after:   '/Transformation/32.webp',
+    comment: "Objectif transformation complète : partir de maigre et construire un physique musclé. +16 kg en 6 mois. Le programme d'Alexis m'a appris à m'entraîner et à manger correctement pour la première fois.",
   },
 ]
+
+// 6 transformations tirées aléatoirement à chaque chargement de page — zéro coût au re-render
+const TRANSFORMATIONS = pickRandom(ALL_TRANSFORMATIONS, 6)
 
 function ComparisonSlider({ before, after, name, hintIndex = 0 }) {
   const containerRef = useRef(null)

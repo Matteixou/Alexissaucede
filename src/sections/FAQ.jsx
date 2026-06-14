@@ -133,7 +133,7 @@ export default function FAQ() {
         <p className="text-center text-sm text-ash mt-14">
           Une autre question ?{' '}
           <a
-            href="mailto:contact@alexissaucede.fr"
+            href="mailto:alexis.saucede@gmail.com"
             className="text-bone underline underline-offset-4 decoration-white/30 hover:text-white hover:decoration-white transition-colors duration-300"
           >
             Écrivez-nous

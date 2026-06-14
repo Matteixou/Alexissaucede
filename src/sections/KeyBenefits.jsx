@@ -82,7 +82,7 @@ export default function KeyBenefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VP}
                 transition={{ duration: 0.9, ease: EASE, delay: i * 0.1 }}
-                className="group flex flex-col items-center text-center px-10 py-12 rounded-xl border border-steel/40 hover:border-white/20 hover:shadow-ember-sm transition-all duration-500 bg-obsidian/60"
+                className="group flex flex-col items-center text-center px-6 py-8 md:px-10 md:py-12 rounded-xl border border-steel/40 hover:border-white/20 hover:shadow-ember-sm transition-all duration-500 bg-obsidian/60"
               >
                 <div className="w-14 h-14 rounded-full bg-shadow flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors duration-500 border border-steel/40">
                   <Icon size={22} strokeWidth={1.5} className="text-white" />
