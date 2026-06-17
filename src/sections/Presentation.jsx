@@ -122,11 +122,24 @@ export default function Presentation() {
               Qui est Alexis ?
             </p>
 
-            <h2 className="font-display font-black italic text-4xl lg:text-5xl xl:text-[3.5rem] text-bone uppercase leading-[1.02] mb-8">
+            <h2 className="font-display font-black italic text-4xl lg:text-5xl xl:text-[3.5rem] text-bone uppercase leading-[1.02] mb-6">
               Coach sportif
               <br />
               <em className="not-italic" style={{ color: '#E8FF00', textShadow: '0 0 28px rgba(232,255,0,0.3)' }}>depuis 8 ans.</em>
             </h2>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              {STATS.map(({ icon: Icon, num, prefix, suffix, label }) => (
+                <div key={label} className="flex flex-col items-start gap-2">
+                  <Icon size={16} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
+                  <p className="font-marker text-2xl sm:text-3xl" style={{ color: '#E8FF00', textShadow: '0 0 14px rgba(232,255,0,0.28)' }}>
+                    <CountUp num={num} prefix={prefix} suffix={suffix} />
+                  </p>
+                  <p className="text-[10px] tracking-[0.15em] uppercase text-ash leading-snug">{label}</p>
+                </div>
+              ))}
+            </div>
 
             <div className="space-y-5 mb-10">
               <p className="text-base text-ash leading-[1.8]">
@@ -155,7 +168,7 @@ export default function Presentation() {
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[11px] tracking-[0.22em] uppercase font-heading font-bold mt-2"
+                className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold mt-2"
                 style={{ background: '#E8FF00' }}
               >
                 <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
@@ -168,18 +181,6 @@ export default function Presentation() {
               </motion.button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-steel/40">
-              {STATS.map(({ icon: Icon, num, prefix, suffix, label }) => (
-                <div key={label} className="flex flex-col items-start gap-2">
-                  <Icon size={16} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
-                  <p className="font-marker text-2xl sm:text-3xl" style={{ color: '#E8FF00', textShadow: '0 0 14px rgba(232,255,0,0.28)' }}>
-                    <CountUp num={num} prefix={prefix} suffix={suffix} />
-                  </p>
-                  <p className="text-[10px] tracking-[0.15em] uppercase text-ash leading-snug">{label}</p>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
         </div>

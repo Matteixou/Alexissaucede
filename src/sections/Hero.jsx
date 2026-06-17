@@ -76,7 +76,7 @@ export default function Hero({ onCtaClick }) {
             >
               <button
                 onClick={onCtaClick}
-                className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[11px] tracking-[0.22em] uppercase font-heading font-bold"
+                className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold"
                 style={{ background: '#E8FF00' }}
               >
                 <span className="relative z-10">Réserver mon bilan personnalisé gratuit</span>
@@ -100,17 +100,17 @@ export default function Hero({ onCtaClick }) {
               {...reveal(1.05)}
               className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2"
             >
-              <span className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ash">
+              <span className="flex items-center gap-1.5 text-[12px] tracking-[0.15em] uppercase text-white font-semibold">
                 <span style={{ color: '#E8FF00' }}>✓</span>
                 Bilan personnalisé gratuit
               </span>
               <span className="text-steel/60 hidden sm:inline">·</span>
-              <span className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ash">
+              <span className="flex items-center gap-1.5 text-[12px] tracking-[0.15em] uppercase text-white font-semibold">
                 <span style={{ color: '#E8FF00' }}>✓</span>
                 500+ personnes transformées
               </span>
               <span className="text-steel/60 hidden sm:inline">·</span>
-              <span className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ash">
+              <span className="flex items-center gap-1.5 text-[12px] tracking-[0.15em] uppercase text-white font-semibold">
                 <span style={{ color: '#E8FF00' }}>✓</span>
                 Résultats en 4 semaines
               </span>
@@ -161,11 +161,14 @@ export default function Hero({ onCtaClick }) {
               </div>
 
               {/* ── Badge ─────────────────────────────────────────────────── */}
-              <motion.div
+              <motion.button
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 initial={{ opacity: 0, scale: 0.8, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
+                whileHover={{ scale: 1.04, transition: { duration: 0.2, ease: 'easeOut' } }}
+                whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
                 transition={{ duration: 0.8, ease: EASE, delay: 1.6 }}
-                className="absolute top-6 right-6 min-w-[170px] bg-obsidian/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-ember-sm pointer-events-none border border-steel/40"
+                className="absolute top-6 right-6 min-w-[170px] bg-obsidian/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-ember-sm border border-steel/40 cursor-pointer text-left hover:border-white/30 transition-colors duration-300"
                 style={{ zIndex: 20 }}
               >
                 <p className="text-[9px] tracking-widest uppercase text-ash mb-1">
@@ -174,7 +177,7 @@ export default function Hero({ onCtaClick }) {
                 <p className="font-heading font-bold text-sm text-bone uppercase tracking-wide">
                   Bilan personnalisé gratuit
                 </p>
-              </motion.div>
+              </motion.button>
 
             </motion.div>
           </div>
