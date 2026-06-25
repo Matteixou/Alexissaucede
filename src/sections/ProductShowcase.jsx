@@ -1,177 +1,29 @@
 import { motion } from 'framer-motion'
-import { Check, MessageCircle, MapPin, Monitor, Zap } from 'lucide-react'
+import { Check, MapPin, Monitor, Zap, MessageCircle } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
 
-const PLAN_PRESENTIEL = {
-  id:        'presentiel',
-  label:     'Forfait Présentiel',
-  sessions:  '10 séances',
-  price:     '700 €',
-  perUnit:   '70 € / séance',
-  highlight: false,
-  badge:     null,
-  cta:       'Réserver mes 10 séances',
-  features:  [
-    'Séance d\'essai offerte',
-    'Entraînements en présentiel',
-    'Programme sur-mesure',
-    'Suivi de progression',
-    'Correction technique en direct',
-  ],
-}
-
-const PLANS_ONLINE = [
-  {
-    id:        'suivi3',
-    label:     'Suivi 3 mois',
-    sessions:  '3 mois',
-    price:     '600 €',
-    perUnit:   '200 € / mois',
-    highlight: false,
-    badge:     null,
-    cta:       'Démarrer 3 mois',
-    features:  [
-      'Suivi en ligne',
-      'Rdv analyse de début de suivi offert',
-      'Coaching à distance. Rdv en visio récurrents pour une progression assurée',
-      "Programme d'entraînement personnalisé avec application dédiée",
-      'Directives nutritionnelles et calcul de macro nutriments',
-      "Suivi hebdomadaire des séances et de l'évolution du poids",
-      'Ajustements réguliers pour optimisation des résultats',
-      'Disponibilité continue pour répondre aux problématiques',
-      'Adaptations des dépenses énergétiques quotidiennes',
-      'Photos avant après',
-    ],
-  },
-  {
-    id:        'suivi6',
-    label:     'Suivi 6 mois',
-    sessions:  '6 mois',
-    price:     '900 €',
-    perUnit:   '150 € / mois',
-    highlight: true,
-    badge:     'Meilleure valeur',
-    cta:       'Je commence ce suivi →',
-    features:  [
-      'Suivi en ligne',
-      'Rdv analyse de début de suivi offert',
-      'Coaching à distance. Rdv en visio récurrents pour une progression assurée',
-      "Programme d'entraînement personnalisé avec application dédiée",
-      'Directives nutritionnelles et calcul de macro nutriments',
-      "Suivi hebdomadaire des séances et de l'évolution du poids",
-      'Ajustements réguliers pour optimisation des résultats',
-      'Disponibilité continue pour répondre aux problématiques',
-      'Adaptations des dépenses énergétiques quotidiennes',
-      'Photos avant après',
-    ],
-  },
+const FEATURES_ONLINE = [
+  'Suivi en ligne',
+  'Rdv analyse de début de suivi offert',
+  'Coaching à distance. Rdv en visio récurrents pour une progression assurée',
+  "Programme d'entraînement personnalisé avec application dédiée",
+  'Directives nutritionnelles et calcul de macro nutriments',
+  "Suivi hebdomadaire des séances et de l'évolution du poids",
+  'Ajustements réguliers pour optimisation des résultats',
+  'Disponibilité continue pour répondre aux problématiques',
+  'Adaptations des dépenses énergétiques quotidiennes',
+  'Photos avant après',
 ]
 
-function PlanCard({ plan, index }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VP}
-      transition={{ duration: 0.9, ease: EASE, delay: index * 0.08 }}
-      className={`relative flex flex-col rounded-xl border transition-all duration-500 overflow-hidden ${
-        plan.highlight
-          ? 'border-white/40 shadow-ember-glow bg-obsidian'
-          : 'border-steel/40 hover:border-white/25 hover:shadow-ember-sm bg-obsidian/60'
-      }`}
-    >
-      {plan.badge && (
-        <div className="absolute top-0 left-0 right-0 py-1.5 text-center" style={{ background: '#E8FF00' }}>
-          <span className="text-[10px] tracking-[0.22em] uppercase text-void font-heading font-bold">
-            {plan.badge}
-          </span>
-        </div>
-      )}
-
-      <div className={`flex flex-col flex-1 p-7 ${plan.badge ? 'pt-12' : ''}`}>
-
-        <p className="text-[10px] tracking-[0.22em] uppercase text-ash mb-2">
-          {plan.sessions}
-        </p>
-        <h3 className="font-heading font-bold text-xl text-bone uppercase tracking-wide mb-6">
-          {plan.label}
-        </h3>
-
-        <div className="mb-6 pb-6 border-b border-steel/40">
-          <p className="font-marker text-4xl leading-none" style={{ color: '#E8FF00', textShadow: '0 0 16px rgba(232,255,0,0.28)' }}>
-            {plan.price}
-          </p>
-          <p className="font-marker text-sm text-white/70 mt-1.5">
-            {plan.perUnit}
-          </p>
-        </div>
-
-        <ul className="flex flex-col gap-3 flex-1 mb-8">
-          {plan.features.map((f) => (
-            <li key={f} className="flex items-start gap-2.5">
-              <Check size={13} strokeWidth={2} className="flex-shrink-0 mt-0.5" style={{ color: plan.highlight ? '#E8FF00' : '#ffffff' }} />
-              <span className="text-xs text-ash leading-relaxed">{f}</span>
-            </li>
-          ))}
-        </ul>
-
-        {plan.highlight && (
-          <p className="flex items-center justify-center gap-1.5 text-[9px] tracking-[0.14em] uppercase text-ash/60 mb-3">
-            <Zap size={9} style={{ color: '#E8FF00' }} />
-            Places limitées ce mois — disponibilité à confirmer
-          </p>
-        )}
-
-        <a
-          href="#contact"
-          className={`flex items-center justify-center gap-2 py-3.5 rounded-lg text-[11px] tracking-[0.18em] uppercase font-heading font-bold transition-all duration-300 ${
-            plan.highlight
-              ? 'text-void hover:opacity-90'
-              : 'bg-shadow text-bone border border-steel/60 hover:border-white/40 hover:text-white'
-          }`}
-          style={plan.highlight ? { background: '#E8FF00' } : {}}
-        >
-          {plan.highlight ? (
-            <>
-              <Zap size={13} strokeWidth={1.5} />
-              {plan.cta}
-            </>
-          ) : (
-            <>
-              <MessageCircle size={13} strokeWidth={1.5} />
-              {plan.cta}
-            </>
-          )}
-        </a>
-      </div>
-    </motion.div>
-  )
-}
-
-function CategoryHeader({ Icon, title, subtitle, index }) {
-  return (
-    <motion.div
-      className="flex items-center gap-4 mb-8"
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={VP}
-      transition={{ duration: 1, ease: EASE, delay: index * 0.1 }}
-    >
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-white/5 border border-steel/40 flex items-center justify-center flex-shrink-0">
-          <Icon size={14} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
-        </div>
-        <div>
-          <p className="text-sm font-heading font-bold text-bone uppercase tracking-[0.18em]">{title}</p>
-          <p className="text-[10px] text-ash tracking-[0.12em] uppercase mt-0.5">{subtitle}</p>
-        </div>
-      </div>
-      <div className="flex-1 h-px bg-gradient-to-r from-steel/40 to-transparent" />
-    </motion.div>
-  )
-}
+const FEATURES_PRESENTIEL = [
+  "Séance d'essai offerte",
+  'Entraînements en présentiel',
+  'Programme sur-mesure',
+  'Suivi de progression',
+  'Correction technique en direct',
+]
 
 export default function ProductShowcase() {
   return (
@@ -210,39 +62,124 @@ export default function ProductShowcase() {
             Tarifs & Formules
           </h2>
           <p className="text-ash max-w-xl mx-auto leading-relaxed text-sm">
-            Deux modes d'accompagnement adaptés à votre situation, vos objectifs et votre niveau de départ — En salle ou à domicile.
+            Deux modes d'accompagnement adaptés à votre situation, vos objectifs et votre niveau de départ.
           </p>
         </motion.div>
 
-        {/* ── Bloc En ligne ────────────────────────────────────────────────── */}
-        <div className="mb-16">
-          <CategoryHeader Icon={Monitor} title="Coaching En Ligne" subtitle="100 % à distance · Partout en France" index={0} />
-          <div className="grid sm:grid-cols-2 gap-6">
-            {PLANS_ONLINE.map((plan, i) => (
-              <PlanCard key={plan.id} plan={plan} index={i} />
-            ))}
-          </div>
-        </div>
+        {/* ── Grille deux cartes ───────────────────────────────────────────── */}
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
 
-        {/* Séparateur */}
-        <motion.div
-          className="flex items-center gap-4 mb-16"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={VP}
-          transition={{ duration: 1, ease: EASE }}
-        >
-          <div className="flex-1 h-px bg-steel/25" />
-          <span className="text-[10px] tracking-[0.22em] uppercase text-ash/50 font-heading px-2">ou</span>
-          <div className="flex-1 h-px bg-steel/25" />
-        </motion.div>
+          {/* ── Carte En ligne ─────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.9, ease: EASE }}
+            className="flex flex-col rounded-xl border border-white/40 shadow-ember-glow bg-obsidian overflow-hidden"
+          >
+            {/* Header carte */}
+            <div className="flex items-center gap-3 px-7 pt-7 pb-5 border-b border-steel/40">
+              <div className="w-8 h-8 rounded-lg bg-white/5 border border-steel/40 flex items-center justify-center flex-shrink-0">
+                <Monitor size={14} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
+              </div>
+              <div>
+                <p className="text-sm font-heading font-bold text-bone uppercase tracking-[0.18em]">Coaching En Ligne</p>
+                <p className="text-[10px] text-ash tracking-[0.12em] uppercase mt-0.5">100 % à distance · Partout en France</p>
+              </div>
+            </div>
 
-        {/* ── Bloc Présentiel ─────────────────────────────────────────────── */}
-        <div>
-          <CategoryHeader Icon={MapPin} title="Coaching Présentiel" subtitle="Séances en studio privatif · Saint-Mandé 94160" index={1} />
-          <div className="max-w-sm mx-auto">
-            <PlanCard plan={PLAN_PRESENTIEL} index={2} />
-          </div>
+            <div className="p-7 flex flex-col flex-1">
+              {/* Prix */}
+              <div className="mb-6 pb-6 border-b border-steel/40">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="text-[11px] tracking-[0.15em] uppercase text-white/60 font-heading">À partir de</span>
+                  <span className="font-marker text-5xl leading-none" style={{ color: '#E8FF00', textShadow: '0 0 20px rgba(232,255,0,0.32)' }}>
+                    100 €
+                  </span>
+                  <span className="font-marker text-lg text-white/70">/ mois</span>
+                </div>
+                <p className="mt-3 text-sm font-heading font-semibold text-bone tracking-wide">
+                  Ton suivi personnalisé et ton tarif sur mesure
+                </p>
+              </div>
+
+              {/* Features */}
+              <ul className="flex flex-col gap-3 flex-1 mb-8">
+                {FEATURES_ONLINE.map((f) => (
+                  <li key={f} className="flex items-start gap-2.5">
+                    <Check size={13} strokeWidth={2} className="flex-shrink-0 mt-0.5" style={{ color: '#E8FF00' }} />
+                    <span className="text-xs text-ash leading-relaxed">{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="flex items-center justify-center gap-1.5 text-[9px] tracking-[0.14em] uppercase text-ash/60 mb-4">
+                <Zap size={9} style={{ color: '#E8FF00' }} />
+                Places limitées ce mois — disponibilité à confirmer
+              </p>
+
+              <a
+                href="#contact"
+                className="flex items-center justify-center gap-2 py-3.5 rounded-lg text-[11px] tracking-[0.18em] uppercase font-heading font-bold transition-all duration-300 text-void hover:opacity-90"
+                style={{ background: '#E8FF00' }}
+              >
+                <Zap size={13} strokeWidth={1.5} />
+                Je commence ce suivi →
+              </a>
+            </div>
+          </motion.div>
+
+          {/* ── Carte Présentiel ────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VP}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
+            className="flex flex-col rounded-xl border border-steel/40 hover:border-white/25 hover:shadow-ember-sm bg-obsidian/60 overflow-hidden transition-all duration-500"
+          >
+            {/* Header carte */}
+            <div className="flex items-center gap-3 px-7 pt-7 pb-5 border-b border-steel/40">
+              <div className="w-8 h-8 rounded-lg bg-white/5 border border-steel/40 flex items-center justify-center flex-shrink-0">
+                <MapPin size={14} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
+              </div>
+              <div>
+                <p className="text-sm font-heading font-bold text-bone uppercase tracking-[0.18em]">Coaching Présentiel</p>
+                <p className="text-[10px] text-ash tracking-[0.12em] uppercase mt-0.5">Studio privatif · Saint-Mandé 94160</p>
+              </div>
+            </div>
+
+            <div className="p-7 flex flex-col flex-1">
+              {/* Prix */}
+              <div className="mb-6 pb-6 border-b border-steel/40">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="text-[11px] tracking-[0.15em] uppercase text-white/60 font-heading">À partir de</span>
+                  <span className="font-marker text-5xl leading-none" style={{ color: '#E8FF00', textShadow: '0 0 20px rgba(232,255,0,0.32)' }}>
+                    70 €
+                  </span>
+                  <span className="font-marker text-lg text-white/70">/ séance</span>
+                </div>
+              </div>
+
+              {/* Features */}
+              <ul className="flex flex-col gap-3 flex-1 mb-8">
+                {FEATURES_PRESENTIEL.map((f) => (
+                  <li key={f} className="flex items-start gap-2.5">
+                    <Check size={13} strokeWidth={2} className="flex-shrink-0 mt-0.5 text-white" />
+                    <span className="text-xs text-ash leading-relaxed">{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href="#contact"
+                className="flex items-center justify-center gap-2 py-3.5 rounded-lg text-[11px] tracking-[0.18em] uppercase font-heading font-bold transition-all duration-300 bg-shadow text-bone border border-steel/60 hover:border-white/40 hover:text-white"
+              >
+                <MessageCircle size={13} strokeWidth={1.5} />
+                Réserver mes séances
+              </a>
+            </div>
+          </motion.div>
+
         </div>
 
         <p className="text-center text-xs text-white/40 mt-10">
