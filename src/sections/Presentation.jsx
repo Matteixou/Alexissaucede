@@ -78,9 +78,9 @@ export default function Presentation() {
               {/* Logo centré sur fond sombre */}
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-shadow via-obsidian to-void">
                 <picture>
-                  <source srcSet="/alexis.webp" type="image/webp" />
+                  <source srcSet="/alexis-v2.webp" type="image/webp" />
                   <img
-                    src="/alexis.jpeg"
+                    src="/alexis-v2.jpeg"
                     alt="Alexis Saucede, coach sportif personnalisé"
                     className="w-full h-full object-cover"
                     width="400"
