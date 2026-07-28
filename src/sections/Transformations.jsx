@@ -5,19 +5,28 @@ import { ChevronsLeftRight } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
 
-// Fisher-Yates shuffle — exécuté une seule fois au chargement du module
-function pickRandom(arr, n) {
+function shuffle(arr) {
   const s = [...arr]
   for (let i = s.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [s[i], s[j]] = [s[j], s[i]]
   }
-  return s.slice(0, n)
+  return s
+}
+
+// Garantit au moins 1 femme dans les n résultats
+function pickRandom(arr, n) {
+  const femmes     = shuffle(arr.filter(t => t.gender === 'femme'))
+  const hommes     = shuffle(arr.filter(t => t.gender === 'homme'))
+  const guaranteed = femmes.length > 0 ? [femmes[0]] : []
+  const rest       = shuffle([...femmes.slice(1), ...hommes]).slice(0, n - guaranteed.length)
+  return shuffle([...guaranteed, ...rest])
 }
 
 const ALL_TRANSFORMATIONS = [
   {
     id:      '01',
+    gender:  'homme',
     name:    'Client #47',
     result:  'Sèche en 4 mois',
     before:  '/Transformation/1.webp',
@@ -26,6 +35,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '02',
+    gender:  'homme',
     name:    'Client #83',
     result:  '-15 kg en 5 mois',
     before:  '/Transformation/3.webp',
@@ -34,6 +44,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '03',
+    gender:  'homme',
     name:    'Client #12',
     result:  'Recomposition en 6 mois',
     before:  '/Transformation/9.webp',
@@ -42,6 +53,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '04',
+    gender:  'homme',
     name:    'Client #61',
     result:  '+8 kg de masse en 3 mois',
     before:  '/Transformation/11.webp',
@@ -50,7 +62,8 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '05',
-    name:    'Client #29',
+    gender:  'femme',
+    name:    'Cliente #29',
     result:  '-22 kg en 7 mois',
     before:  '/Transformation/17.webp',
     after:   '/Transformation/18.webp',
@@ -58,7 +71,8 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '06',
-    name:    'Client #74',
+    gender:  'femme',
+    name:    'Cliente #74',
     result:  '-14 kg en 5 mois',
     before:  '/Transformation/19.webp',
     after:   '/Transformation/20.webp',
@@ -66,6 +80,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '07',
+    gender:  'homme',
     name:    'Client #38',
     result:  '+10 kg de masse en 4 mois',
     before:  '/Transformation/21.webp',
@@ -74,6 +89,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '08',
+    gender:  'homme',
     name:    'Client #55',
     result:  '+12 kg de masse en 5 mois',
     before:  '/Transformation/23.webp',
@@ -82,6 +98,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '09',
+    gender:  'homme',
     name:    'Client #91',
     result:  '+14 kg de masse en 6 mois',
     before:  '/Transformation/25.webp',
@@ -90,6 +107,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '10',
+    gender:  'homme',
     name:    'Client #16',
     result:  'Recomposition en 4 mois',
     before:  '/Transformation/27.webp',
@@ -98,6 +116,7 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '11',
+    gender:  'homme',
     name:    'Client #67',
     result:  '-18 kg en 5 mois',
     before:  '/Transformation/29.webp',
@@ -106,11 +125,39 @@ const ALL_TRANSFORMATIONS = [
   },
   {
     id:      '12',
+    gender:  'homme',
     name:    'Client #43',
     result:  '+16 kg de masse en 6 mois',
     before:  '/Transformation/31.webp',
     after:   '/Transformation/32.webp',
     comment: "Objectif transformation complète : partir de maigre et construire un physique musclé. +16 kg en 6 mois. Le programme d'Alexis m'a appris à m'entraîner et à manger correctement pour la première fois.",
+  },
+  {
+    id:      '13',
+    gender:  'homme',
+    name:    'Client #58',
+    result:  'Transformation en 5 mois',
+    before:  '/Transformation/33.webp',
+    after:   '/Transformation/34.webp',
+    comment: "Un suivi complet qui a tout changé. En 5 mois, Alexis m'a aidé à atteindre des résultats que je n'aurais jamais obtenus seul. Programme et nutrition entièrement adaptés à mon mode de vie.",
+  },
+  {
+    id:      '14',
+    gender:  'homme',
+    name:    'Client #72',
+    result:  'Transformation en 4 mois',
+    before:  '/Transformation/35.webp',
+    after:   '/Transformation/36.webp',
+    comment: "4 mois de travail acharné avec le bon accompagnement. Alexis a su adapter le programme à mes contraintes et mon emploi du temps. Les résultats parlent d'eux-mêmes.",
+  },
+  {
+    id:      '15',
+    gender:  'femme',
+    name:    'Cliente #19',
+    result:  'Transformation en 4 mois',
+    before:  '/Transformation/37.webp',
+    after:   '/Transformation/38.webp',
+    comment: "Je cherchais un coaching sérieux et bienveillant. Alexis a su me guider avec patience et efficacité. En 4 mois, ma silhouette a complètement changé et je me sens bien dans mon corps.",
   },
 ]
 
