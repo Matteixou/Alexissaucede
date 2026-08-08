@@ -120,8 +120,9 @@ function ToggleMulti({ options, values, onChange }) {
 }
 
 export default function Contact() {
-  const [form, setForm]     = useState(EMPTY_FORM)
-  const [status, setStatus] = useState('idle')
+  const [form, setForm]       = useState(EMPTY_FORM)
+  const [status, setStatus]   = useState('idle')
+  const [sentPrenom, setSentPrenom] = useState('')
 
   const set = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }))
   const setVal = (key) => (val) => setForm(prev => ({ ...prev, [key]: val }))
@@ -167,6 +168,7 @@ export default function Contact() {
       if (res.ok) {
         window.dataLayer = window.dataLayer || []
         window.dataLayer.push({ event: 'form-submit' })
+        setSentPrenom(form.prenom)
         setStatus('success')
         setForm(EMPTY_FORM)
       } else setStatus('error')
@@ -302,10 +304,12 @@ export default function Contact() {
                     <CheckCircle size={48} strokeWidth={1.2} style={{ color: '#E8FF00' }} />
                     <div>
                       <p className="font-heading font-bold text-xl text-bone uppercase tracking-wide mb-2">
-                        Questionnaire envoyé !
+                        Merci {sentPrenom} !
                       </p>
-                      <p className="text-sm text-ash leading-relaxed">
-                        Alexis reviendra vers toi dans les 24 h.
+                      <p className="text-sm text-ash leading-relaxed max-w-sm">
+                        Je vais personnellement analyser tes réponses et t'envoyer un WhatsApp assez rapidement depuis le numéro{' '}
+                        <span className="text-bone font-medium">06 35 54 48 56</span>.
+                        Garde un œil sur tes messages.
                       </p>
                     </div>
                     <button
