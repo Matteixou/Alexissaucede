@@ -398,6 +398,31 @@ export default function Transformations() {
         <p className="text-center text-xs text-white/70 mt-10">
           Les résultats varient selon l'engagement, la nutrition et le profil de chaque athlète.
         </p>
+
+        <motion.div
+          className="flex justify-center mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VP}
+          transition={{ duration: 0.8, ease: EASE }}
+        >
+          <motion.button
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="relative overflow-hidden text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold"
+            style={{ background: '#E8FF00' }}
+          >
+            <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
+            <motion.span
+              className="absolute inset-0 bg-white"
+              initial={{ x: '-105%' }}
+              whileHover={{ x: 0 }}
+              transition={{ duration: 0.45, ease: EASE }}
+            />
+          </motion.button>
+        </motion.div>
+
       </div>
     </section>
   )

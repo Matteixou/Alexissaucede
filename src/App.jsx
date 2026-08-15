@@ -5,12 +5,13 @@ import Navbar from './components/Navbar'
 import CustomCursor from './components/CustomCursor'
 import Hero from './sections/Hero'
 
-const Transformations  = lazy(() => import('./sections/Transformations'))
-const ParallaxBanner   = lazy(() => import('./sections/ParallaxBanner'))
 const Presentation     = lazy(() => import('./sections/Presentation'))
-const KeyBenefits      = lazy(() => import('./sections/KeyBenefits'))
-const Reviews          = lazy(() => import('./sections/Reviews'))
+const Transformations  = lazy(() => import('./sections/Transformations'))
+const LogoSection      = lazy(() => import('./sections/LogoSection'))
 const ProductShowcase  = lazy(() => import('./sections/ProductShowcase'))
+const ParallaxBanner   = lazy(() => import('./sections/ParallaxBanner'))
+const Reviews          = lazy(() => import('./sections/Reviews'))
+const KeyBenefits      = lazy(() => import('./sections/KeyBenefits'))
 const Ingredients      = lazy(() => import('./sections/Ingredients'))
 const FAQ              = lazy(() => import('./sections/FAQ'))
 const Contact          = lazy(() => import('./sections/Contact'))
@@ -60,16 +61,17 @@ export default function App() {
       <Navbar />
 
       <main>
-        <Hero onCtaClick={scrollToContact} />
+        <Hero />
         <Suspense fallback={null}>
-          <Transformations />
-          <ParallaxBanner src="/banner 1.webp" position="center" />
           <Presentation />
-          <KeyBenefits />
-          <ParallaxBanner src="/banner 2.webp" position="left bottom" />
-          <Reviews />
-          <ParallaxBanner src="/banner 3.webp" position="center" />
+          <LogoSection />
+          <Transformations />
           <ProductShowcase />
+          <ParallaxBanner src="/banner 1.webp" position="center" />
+          <Reviews />
+          <ParallaxBanner src="/banner 2.webp" position="left bottom" />
+          <KeyBenefits />
+          <ParallaxBanner src="/banner 3.webp" position="center" />
           <Ingredients />
           <ParallaxBanner src="/banner 4.webp" position="right bottom" />
           <FAQ />

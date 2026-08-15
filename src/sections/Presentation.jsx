@@ -141,7 +141,7 @@ export default function Presentation() {
               ))}
             </div>
 
-            <div className="space-y-5 mb-10">
+            <div className="space-y-5">
               <p className="text-base text-ash leading-[1.8]">
                 Éducateur sportif depuis <span className="text-bone font-medium">8 ans</span>, j'accompagne celles et ceux qui souhaitent
                 perdre du poids, prendre du muscle ou simplement retrouver une meilleure forme physique grâce à un{' '}
@@ -164,21 +164,6 @@ export default function Presentation() {
               <p className="text-base leading-[1.8] font-medium" style={{ color: '#E8FF00' }}>
                 Alors si vous êtes prêt à changer vos habitudes pour obtenir de vrais résultats, commençons dès aujourd'hui.
               </p>
-              <motion.button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden group text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold mt-2"
-                style={{ background: '#E8FF00' }}
-              >
-                <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
-                <motion.span
-                  className="absolute inset-0 bg-white"
-                  initial={{ x: '-105%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.45, ease: EASE }}
-                />
-              </motion.button>
             </div>
 
           </motion.div>
