@@ -27,7 +27,7 @@ const FEATURES_PRESENTIEL = [
 
 export default function ProductShowcase() {
   return (
-    <section id="tarifs" className="relative py-28 px-6 lg:px-10 bg-void">
+    <section id="tarifs" className="relative pt-14 pb-28 px-6 lg:px-10 bg-void">
 
       <div className="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
         <svg className="w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice">
