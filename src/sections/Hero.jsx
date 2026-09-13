@@ -137,6 +137,30 @@ export default function Hero() {
           </div>
         </motion.div>
 
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE, delay: 1.05 }}
+          className="mt-8"
+        >
+          <motion.button
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="relative overflow-hidden text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold"
+            style={{ background: '#E8FF00' }}
+          >
+            <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
+            <motion.span
+              className="absolute inset-0 bg-white"
+              initial={{ x: '-105%' }}
+              whileHover={{ x: 0 }}
+              transition={{ duration: 0.45, ease: EASE }}
+            />
+          </motion.button>
+        </motion.div>
+
       </div>
     </section>
   )

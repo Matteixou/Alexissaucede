@@ -29,9 +29,10 @@ const INFOS = [
   { icon: MapPin,  label: 'Localisation',         value: 'Saint-Mandé (94)',        href: null },
 ]
 
-const OBJECTIFS   = ['Perte de poids', 'Prise de muscle', 'Remise en forme', 'Autre']
-const NIVEAUX     = ['Débutant', 'Intermédiaire', 'Confirmé']
+const OBJECTIFS     = ['Perte de poids', 'Prise de muscle', 'Remise en forme', 'Autre']
+const NIVEAUX       = ['Débutant', 'Intermédiaire', 'Confirmé']
 const ENTRAINEMENTS = ['Salle', 'Maison', 'Extérieur']
+const BUDGETS       = ['50-100€/mois', '100-200€/mois', '>200€/mois']
 
 const EMPTY_FORM = {
   nom: '', prenom: '', telephone: '', email: '',
@@ -43,6 +44,8 @@ const EMPTY_FORM = {
   materiel: '',
   pourquoi: '',
   message: '',
+  budget: '',
+  motivation: 50,
 }
 
 const inputClass =
@@ -119,6 +122,39 @@ function ToggleMulti({ options, values, onChange }) {
   )
 }
 
+function MotivationSlider({ value, onChange }) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] tracking-[0.12em] uppercase text-white/70 font-semibold">Pas motivé</span>
+        <span className="font-marker text-3xl" style={{ color: '#E8FF00', textShadow: '0 0 14px rgba(232,255,0,0.3)' }}>
+          {value}%
+        </span>
+        <span className="text-[10px] tracking-[0.12em] uppercase text-white/70 font-semibold">Ultra motivé</span>
+      </div>
+      <div className="relative h-3 rounded-full bg-steel/30">
+        <div
+          className="absolute left-0 top-0 h-full rounded-full transition-all duration-75"
+          style={{ width: `${value}%`, background: 'linear-gradient(90deg, rgba(232,255,0,0.4) 0%, #E8FF00 100%)' }}
+        />
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+      </div>
+      <div className="flex justify-between text-[9px] tracking-[0.1em] uppercase text-ash/40">
+        <span>0%</span>
+        <span>50%</span>
+        <span>100%</span>
+      </div>
+    </div>
+  )
+}
+
 export default function Contact() {
   const [form, setForm]       = useState(EMPTY_FORM)
   const [status, setStatus]   = useState('idle')
@@ -147,6 +183,8 @@ export default function Contact() {
         `Problématique: ${form.problematique}`,
         `Pourquoi un coach: ${form.pourquoi}`,
         `Message: ${form.message}`,
+        `Budget mensuel: ${form.budget}`,
+        `Niveau de motivation: ${form.motivation}%`,
       ].join('\n')
       window.dataLayer = window.dataLayer || []
       window.dataLayer.push({ event: 'form-submit' })
@@ -163,6 +201,7 @@ export default function Contact() {
           ...form,
           objectif:     form.objectif === 'Autre' ? `Autre — ${form.objectifAutre}` : form.objectif,
           entrainement: form.entrainement.join(', '),
+          motivation:   `${form.motivation}%`,
         }),
       })
       if (res.ok) {
@@ -431,6 +470,23 @@ export default function Contact() {
                     {/* Message supplémentaire */}
                     <Field label="Message supplémentaire" optional>
                       <textarea rows={3} placeholder="Toute autre information utile…" value={form.message} onChange={set('message')} className={inputClass + ' resize-none'} />
+                    </Field>
+
+                    {/* Séparateur qualification */}
+                    <div className="flex items-center gap-3 my-1">
+                      <div className="flex-1 h-px bg-steel/25" />
+                      <span className="text-[9px] tracking-[0.18em] uppercase text-white/30 font-sans">Qualification</span>
+                      <div className="flex-1 h-px bg-steel/25" />
+                    </div>
+
+                    {/* Budget */}
+                    <Field label="Budget mensuel pour l'accompagnement" required>
+                      <ToggleSingle options={BUDGETS} value={form.budget} onChange={setVal('budget')} />
+                    </Field>
+
+                    {/* Motivation */}
+                    <Field label="Niveau de motivation">
+                      <MotivationSlider value={form.motivation} onChange={setVal('motivation')} />
                     </Field>
 
                     {/* Erreur */}
