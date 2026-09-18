@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
+import CookieBanner from './components/CookieBanner'
 import CustomCursor from './components/CustomCursor'
 import Hero from './sections/Hero'
 
@@ -16,6 +17,7 @@ const Ingredients      = lazy(() => import('./sections/Ingredients'))
 const FAQ              = lazy(() => import('./sections/FAQ'))
 const Contact          = lazy(() => import('./sections/Contact'))
 const MentionsLegales  = lazy(() => import('./pages/MentionsLegales'))
+const CGV              = lazy(() => import('./pages/CGV'))
 
 export default function App() {
 
@@ -57,10 +59,16 @@ export default function App() {
 
   const MainPage = (
     <div className="min-h-screen bg-void font-sans antialiased grain-overlay">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-void focus:border focus:border-steel/60 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-heading focus:tracking-wide"
+      >
+        Passer au contenu principal
+      </a>
       <CustomCursor />
       <Navbar />
 
-      <main>
+      <main id="main-content">
         <Hero />
         <Suspense fallback={null}>
           <Presentation />
@@ -78,6 +86,8 @@ export default function App() {
           <Contact />
         </Suspense>
       </main>
+
+      <CookieBanner />
 
       <footer className="relative border-t border-steel/40 py-12 bg-abyss overflow-hidden">
         <svg
@@ -119,11 +129,15 @@ export default function App() {
             <a href="#contact"         className="hover:text-white transition-colors duration-300">Contact</a>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-ash/40">
+          <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 text-xs text-ash/40">
             <p>© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
-            <span>·</span>
+            <span aria-hidden="true">·</span>
             <Link to="/mentions-legales" className="hover:text-ash transition-colors duration-300">
               Mentions légales
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link to="/cgv" className="hover:text-ash transition-colors duration-300">
+              CGV
             </Link>
           </div>
         </div>
@@ -136,6 +150,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={MainPage} />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
+        <Route path="/cgv" element={<CGV />} />
       </Routes>
     </Suspense>
   )

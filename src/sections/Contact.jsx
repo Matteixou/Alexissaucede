@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react'
+import React, { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Instagram, Mail, MapPin, Phone, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react'
 
@@ -45,7 +45,6 @@ const EMPTY_FORM = {
   pourquoi: '',
   message: '',
   budget: '',
-  motivation: 50,
 }
 
 const inputClass =
@@ -54,14 +53,20 @@ const inputClass =
   'focus:border-[#E8FF00]/60 focus:ring-2 focus:ring-[#E8FF00]/10'
 
 function Field({ label, required, optional, children }) {
+  const id = `f-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').slice(0, 40)}`
+  const child = React.Children.only(children)
+  const isNative = typeof child.type === 'string'
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] tracking-[0.12em] uppercase text-white/80 font-sans font-medium">
+      <label
+        htmlFor={isNative ? id : undefined}
+        className="text-[11px] tracking-[0.12em] uppercase text-white/80 font-sans font-medium"
+      >
         {label}
         {required && <span className="ml-1 opacity-50">*</span>}
         {optional && <span className="ml-1.5 normal-case tracking-normal opacity-40 text-[10px]">(optionnel)</span>}
       </label>
-      {children}
+      {isNative ? React.cloneElement(child, { id, 'aria-required': required || undefined }) : child}
     </div>
   )
 }
@@ -122,38 +127,6 @@ function ToggleMulti({ options, values, onChange }) {
   )
 }
 
-function MotivationSlider({ value, onChange }) {
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] tracking-[0.12em] uppercase text-white/70 font-semibold">Pas motivé</span>
-        <span className="font-marker text-3xl" style={{ color: '#E8FF00', textShadow: '0 0 14px rgba(232,255,0,0.3)' }}>
-          {value}%
-        </span>
-        <span className="text-[10px] tracking-[0.12em] uppercase text-white/70 font-semibold">Ultra motivé</span>
-      </div>
-      <div className="relative h-3 rounded-full bg-steel/30">
-        <div
-          className="absolute left-0 top-0 h-full rounded-full transition-all duration-75"
-          style={{ width: `${value}%`, background: 'linear-gradient(90deg, rgba(232,255,0,0.4) 0%, #E8FF00 100%)' }}
-        />
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-      </div>
-      <div className="flex justify-between text-[9px] tracking-[0.1em] uppercase text-ash/40">
-        <span>0%</span>
-        <span>50%</span>
-        <span>100%</span>
-      </div>
-    </div>
-  )
-}
 
 export default function Contact() {
   const [form, setForm]       = useState(EMPTY_FORM)
@@ -184,7 +157,6 @@ export default function Contact() {
         `Pourquoi un coach: ${form.pourquoi}`,
         `Message: ${form.message}`,
         `Budget mensuel: ${form.budget}`,
-        `Niveau de motivation: ${form.motivation}%`,
       ].join('\n')
       window.dataLayer = window.dataLayer || []
       window.dataLayer.push({ event: 'form-submit' })
@@ -201,7 +173,6 @@ export default function Contact() {
           ...form,
           objectif:     form.objectif === 'Autre' ? `Autre — ${form.objectifAutre}` : form.objectif,
           entrainement: form.entrainement.join(', '),
-          motivation:   `${form.motivation}%`,
         }),
       })
       if (res.ok) {
@@ -381,8 +352,8 @@ export default function Contact() {
 
                     {/* Tel + Email */}
                     <div className="grid sm:grid-cols-2 gap-5">
-                      <Field label="Téléphone" optional>
-                        <input type="tel" placeholder="06 XX XX XX XX" value={form.telephone} onChange={set('telephone')} className={inputClass} />
+                      <Field label="Téléphone" required>
+                        <input type="tel" required placeholder="06 XX XX XX XX" value={form.telephone} onChange={set('telephone')} className={inputClass} />
                       </Field>
                       <Field label="Email" required>
                         <input type="email" required placeholder="ton@email.fr" value={form.email} onChange={set('email')} className={inputClass} />
@@ -482,11 +453,6 @@ export default function Contact() {
                     {/* Budget */}
                     <Field label="Budget mensuel pour l'accompagnement" required>
                       <ToggleSingle options={BUDGETS} value={form.budget} onChange={setVal('budget')} />
-                    </Field>
-
-                    {/* Motivation */}
-                    <Field label="Niveau de motivation">
-                      <MotivationSlider value={form.motivation} onChange={setVal('motivation')} />
                     </Field>
 
                     {/* Erreur */}

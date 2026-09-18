@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Award, Clock, Users } from 'lucide-react'
+import { Award, Clock, Users, ExternalLink } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1]
 const VP   = { once: true, margin: '200px' }
@@ -165,6 +165,23 @@ export default function Presentation() {
                 Alors si vous êtes prêt à changer vos habitudes pour obtenir de vrais résultats, commençons dès aujourd'hui.
               </p>
             </div>
+
+            {/* Badge presse */}
+            <a
+              href="https://adresses-incontournables.madame.lefigaro.fr/les-adresses-services/alexis-saucede/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 flex items-center gap-4 p-4 rounded-xl border border-steel/40 hover:border-[#E8FF00]/40 bg-shadow/40 transition-all duration-300 group"
+            >
+              <div className="flex-shrink-0 flex flex-col items-start">
+                <p className="text-[9px] tracking-[0.22em] uppercase text-ash/60 font-heading mb-1">Vu dans la presse</p>
+                <p className="font-display font-black italic text-xl text-bone uppercase leading-none group-hover:text-white transition-colors duration-300">
+                  Madame Figaro
+                </p>
+              </div>
+              <div className="flex-1 h-px bg-steel/30 mx-2 group-hover:bg-[#E8FF00]/20 transition-colors duration-300" />
+              <ExternalLink size={15} strokeWidth={1.5} className="flex-shrink-0 text-ash/40 group-hover:text-[#E8FF00] transition-colors duration-300" />
+            </a>
 
           </motion.div>
 
