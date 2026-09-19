@@ -80,7 +80,7 @@ function ASLogo({ scrollRef, zoomRef }) {
         geos.forEach(g => g.dispose())
         _heroGeo = merged ?? geos[0]
         attachMesh(_heroGeo)
-      }).catch(console.error)
+      }).catch(() => {})
     }
 
     return () => {
