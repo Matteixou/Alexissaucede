@@ -7,24 +7,11 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Alexis Saucede" />
 
-    <!-- Consent mode defaults RGPD — must run before GTM -->
+    <!-- GTM dataLayer init — GTM script injected only after cookie consent (RGPD) -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', {
-        analytics_storage: 'denied',
-        ad_storage:        'denied',
-        wait_for_update:   2000
-      });
     </script>
-
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-W7VT43L8');</script>
-    <!-- End Google Tag Manager -->
 
     <title>Alexis Saucede — Coach Sportif Musculation Saint-Mandé (94)</title>
     <meta name="description" content="Alexis Saucede, coach sportif à Saint-Mandé (94). Programmes musculation personnalisés, suivi nutrition, méthode prouvée. +500 personnes accompagnées. Bilan personnalisé gratuit." />
@@ -102,10 +89,6 @@
     </noscript>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W7VT43L8"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

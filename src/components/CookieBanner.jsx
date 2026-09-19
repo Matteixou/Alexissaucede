@@ -3,14 +3,31 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const EASE = [0.16, 1, 0.3, 1]
+const GTM_ID = 'GTM-W7VT43L8'
+
+function loadGTM() {
+  if (document.getElementById('gtm-script')) return
+  // Consent defaults before GTM loads
+  gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage:        'denied',
+    wait_for_update:   2000,
+  })
+  // Inject GTM script
+  const s = document.createElement('script')
+  s.id = 'gtm-script'
+  s.async = true
+  s.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`
+  document.head.appendChild(s)
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+}
 
 function grantConsent() {
-  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-    window.gtag('consent', 'update', {
-      analytics_storage: 'granted',
-      ad_storage:        'granted',
-    })
-  }
+  gtag('consent', 'update', {
+    analytics_storage: 'granted',
+    ad_storage:        'granted',
+  })
 }
 
 export default function CookieBanner() {
@@ -22,13 +39,16 @@ export default function CookieBanner() {
       if (!saved) {
         setVisible(true)
       } else if (saved === 'granted') {
+        loadGTM()
         grantConsent()
       }
+      // if 'denied': GTM never loads, no cookies
     } catch {}
   }, [])
 
   const accept = () => {
     try { localStorage.setItem('cookieConsent', 'granted') } catch {}
+    loadGTM()
     grantConsent()
     setVisible(false)
   }
