@@ -62,7 +62,7 @@ function BgLogo() {
         geos.forEach(g => g.dispose())
         _contactGeo = merged ?? geos[0]
         attachMesh(_contactGeo)
-      }).catch(console.error)
+      }).catch(() => {})
     }
 
     return () => {

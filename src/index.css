@@ -51,6 +51,44 @@
 }
 
 
+/* ── Entrées du hero & navbar — CSS pur pour s'animer avant l'hydratation React ── */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes mask-reveal {
+  from { transform: translateY(110%); }
+  to   { transform: none; }
+}
+@keyframes nav-in {
+  from { transform: translateY(-100%); }
+  to   { transform: none; }
+}
+.anim-rise   { animation: rise-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-reveal { animation: mask-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-nav    { animation: nav-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Compteur animé sans JS : --num interpolé comme entier, affiché via counter() */
+@property --num {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
+}
+@keyframes count-up {
+  from { --num: 0; }
+  to   { --num: var(--to); }
+}
+.count-up {
+  animation: count-up 1.6s cubic-bezier(0.33, 1, 0.68, 1) 0.5s both;
+  counter-reset: num var(--num);
+}
+.count-up::after { content: counter(num); }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise, .anim-reveal, .anim-nav { animation: none; }
+  .count-up { animation: none; counter-reset: num var(--to); }
+}
+
 /* ── Glitch sur le titre hero ───────────────────────────────────────── */
 @keyframes glitch-hero {
   0%, 86%, 100% {

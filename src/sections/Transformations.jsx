@@ -164,6 +164,19 @@ const ALL_TRANSFORMATIONS = [
 // 6 transformations tirées aléatoirement à chaque chargement de page — zéro coût au re-render
 const TRANSFORMATIONS = pickRandom(ALL_TRANSFORMATIONS, 6)
 
+// Variantes générées par scripts/responsive-images.mjs
+const IMG_SIZES = '(min-width: 768px) 384px, (min-width: 640px) 320px, 46vw'
+const imgProps = (src) => {
+  const base = src.replace(/\.webp$/, '')
+  return {
+    src:      `${base}-800.webp`,
+    srcSet:   `${base}-400.webp 400w, ${base}-800.webp 800w`,
+    sizes:    IMG_SIZES,
+    loading:  'lazy',
+    decoding: 'async',
+  }
+}
+
 function ComparisonSlider({ before, after, name, hintIndex = 0 }) {
   const containerRef = useRef(null)
   const [position, setPosition]   = useState(50)
@@ -210,7 +223,7 @@ function ComparisonSlider({ before, after, name, hintIndex = 0 }) {
     return (
       <div className="relative overflow-hidden h-64 sm:h-80 md:h-96 bg-[#0A0A0F]">
         <img
-          src={after}
+          {...imgProps(after)}
           alt={`Transformation — ${name}`}
           className="absolute inset-0 w-full h-full object-cover"
           draggable={false}
@@ -234,17 +247,17 @@ function ComparisonSlider({ before, after, name, hintIndex = 0 }) {
     >
       {/* ── Image APRÈS (base, pleine largeur) ── */}
       <img
-        src={after}
+        {...imgProps(after)}
         alt={`Après — ${name}`}
-        className="absolute inset-0 w-full h-full object-contain object-top pointer-events-none" loading="lazy"
+        className="absolute inset-0 w-full h-full object-contain object-top pointer-events-none"
         draggable={false}
       />
 
       {/* ── Image AVANT (clippée côté gauche) ── */}
       <img
-        src={before}
+        {...imgProps(before)}
         alt={`Avant — ${name}`}
-        className="absolute inset-0 w-full h-full object-contain object-top pointer-events-none" loading="lazy"
+        className="absolute inset-0 w-full h-full object-contain object-top pointer-events-none"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
         draggable={false}
       />

@@ -100,8 +100,11 @@ export default function Ingredients() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <motion.img
                     src={module.imageSrc}
+                    srcSet={`${module.imageSrc.replace('w=700', 'w=420')} 420w, ${module.imageSrc} 700w`}
+                    sizes="(min-width: 768px) 400px, calc(100vw - 48px)"
                     alt={module.name}
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover opacity-70"
                     whileHover={{ scale: 1.06 }}
                     transition={{ duration: 0.75, ease: EASE }}

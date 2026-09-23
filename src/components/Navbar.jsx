@@ -64,30 +64,24 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      <motion.header
-        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${
+      <header
+        className={`anim-nav fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${
           scrolled
             ? 'bg-abyss/90 backdrop-blur-md border-b border-steel/40'
             : 'bg-transparent'
         }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.9, ease: EASE }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-[72px] flex items-center justify-between">
 
           {/* Logo */}
           <a href="/" className="flex items-center select-none" onClick={close}>
-            <picture>
-              <source srcSet="/logoalexissaucede.webp" type="image/webp" />
-              <img
-                src="/logoalexissaucede.jpg"
-                alt="Alexis Saucede Coaching"
-                className="h-11 w-11 object-contain rounded-lg"
-                width="44"
-                height="44"
-              />
-            </picture>
+            <img
+              src="/logo-112.webp"
+              alt="Alexis Saucede Coaching"
+              className="h-11 w-11 object-contain rounded-lg"
+              width="44"
+              height="44"
+            />
           </a>
 
           {/* Navigation desktop */}
@@ -200,7 +194,7 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
     </>
   )
 }

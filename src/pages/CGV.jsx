@@ -146,15 +146,15 @@ export default function CGV() {
             de trouver une solution amiable avant tout recours judiciaire. À défaut, les tribunaux de Paris
             seront seuls compétents.
           </p>
-          <p className="text-ash/50 text-xs">
-            Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+          <p className="text-ash text-xs">
+            Dernière mise à jour : 18 septembre 2026
           </p>
         </Section>
 
       </main>
 
       <footer className="border-t border-steel/40 py-8 text-center">
-        <p className="text-xs text-ash/40">© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
+        <p className="text-xs text-ash" suppressHydrationWarning>{`© ${new Date().getFullYear()} Alexis Saucede. Tous droits réservés.`}</p>
       </footer>
     </div>
   )

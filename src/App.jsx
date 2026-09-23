@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { useEffect, useState, startTransition, lazy, Suspense } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
@@ -18,6 +18,34 @@ const FAQ              = lazy(() => import('./sections/FAQ'))
 const Contact          = lazy(() => import('./sections/Contact'))
 const MentionsLegales  = lazy(() => import('./pages/MentionsLegales'))
 const CGV              = lazy(() => import('./pages/CGV'))
+
+const YEAR = new Date().getFullYear()
+
+// Pre-rendered HTML contains only the hero; below-the-fold sections mount after hydration.
+// One Suspense boundary so they appear together in page order: revealed one by one, a section
+// could briefly sit right under the hero and trigger the 3D logos' viewport-based loading.
+function HomeSections() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { startTransition(() => setReady(true)) }, [])
+  if (!ready) return null
+  return (
+    <Suspense fallback={null}>
+      <Presentation />
+      <LogoSection />
+      <Transformations />
+      <ProductShowcase />
+      <ParallaxBanner banner={1} position="center" />
+      <Reviews />
+      <ParallaxBanner banner={2} position="left bottom" />
+      <KeyBenefits />
+      <ParallaxBanner banner={3} position="center" />
+      <Ingredients />
+      <ParallaxBanner banner={4} position="right bottom" />
+      <FAQ />
+      <Contact />
+    </Suspense>
+  )
+}
 
 export default function App() {
 
@@ -47,16 +75,6 @@ export default function App() {
     }
   }, [])
 
-  const scrollToContact = () => {
-    const target = document.getElementById('contact')
-    if (!target) return
-    if (window.__lenis) {
-      window.__lenis.scrollTo(target, { duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 4) })
-    } else {
-      target.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   const MainPage = (
     <div className="min-h-screen bg-void font-sans antialiased grain-overlay">
       <a
@@ -70,21 +88,7 @@ export default function App() {
 
       <main id="main-content">
         <Hero />
-        <Suspense fallback={null}>
-          <Presentation />
-          <LogoSection />
-          <Transformations />
-          <ProductShowcase />
-          <ParallaxBanner src="/banner 1.webp" position="center" />
-          <Reviews />
-          <ParallaxBanner src="/banner 2.webp" position="left bottom" />
-          <KeyBenefits />
-          <ParallaxBanner src="/banner 3.webp" position="center" />
-          <Ingredients />
-          <ParallaxBanner src="/banner 4.webp" position="right bottom" />
-          <FAQ />
-          <Contact />
-        </Suspense>
+        <HomeSections />
       </main>
 
       <CookieBanner />
@@ -103,17 +107,14 @@ export default function App() {
         </svg>
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 flex flex-col items-center gap-6">
-          <picture>
-            <source srcSet="/logoalexissaucede.webp" type="image/webp" />
-            <img
-              src="/logoalexissaucede.jpg"
-              alt="Alexis Saucede Coaching"
-              className="h-14 w-14 object-contain rounded-xl"
-              width="56"
-              height="56"
-              loading="lazy"
-            />
-          </picture>
+          <img
+            src="/logo-112.webp"
+            alt="Alexis Saucede Coaching"
+            className="h-14 w-14 object-contain rounded-xl"
+            width="56"
+            height="56"
+            loading="lazy"
+          />
 
           <p className="text-xs tracking-[0.22em] uppercase text-ash text-center">
             Coaching Musculation · Suivi Personnalisé · Méthode Prouvée
@@ -130,7 +131,8 @@ export default function App() {
           </div>
 
           <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 text-xs text-ash/40">
-            <p>© {new Date().getFullYear()} Alexis Saucede. Tous droits réservés.</p>
+            {/* Le HTML pré-rendu porte l'année du build : React la corrige sans erreur d'hydratation */}
+            <p suppressHydrationWarning>{`© ${YEAR} Alexis Saucede. Tous droits réservés.`}</p>
             <span aria-hidden="true">·</span>
             <Link to="/mentions-legales" className="hover:text-ash transition-colors duration-300">
               Mentions légales

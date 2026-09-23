@@ -77,17 +77,17 @@ export default function Presentation() {
             <div className="relative rounded-2xl overflow-hidden border border-steel/40 aspect-[3/4] max-w-sm mx-auto lg:max-w-none bg-shadow">
               {/* Logo centré sur fond sombre */}
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-shadow via-obsidian to-void">
-                <picture>
-                  <source srcSet="/alexis-v2.webp" type="image/webp" />
-                  <img
-                    src="/alexis-v2.jpeg"
-                    alt="Alexis Saucede, coach sportif personnalisé"
-                    className="w-full h-full object-cover"
-                    width="400"
-                    height="533"
-                    fetchpriority="high"
-                  />
-                </picture>
+                <img
+                  src="/alexis-v2-800.webp"
+                  srcSet="/alexis-v2-480.webp 480w, /alexis-v2-800.webp 800w, /alexis-v2.webp 1086w"
+                  sizes="(min-width: 1024px) 540px, (min-width: 448px) 384px, calc(100vw - 48px)"
+                  alt="Alexis Saucede, coach sportif personnalisé"
+                  className="w-full h-full object-cover"
+                  width="400"
+                  height="533"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               {/* Dégradé bas */}
               <div className="absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-transparent" />

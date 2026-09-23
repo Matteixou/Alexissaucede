@@ -2,10 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     react(),
-    ViteImageOptimizer({
+    !isSsrBuild && ViteImageOptimizer({
       jpg: { quality: 82 },
       jpeg: { quality: 82 },
       png: { quality: 85 },
@@ -15,17 +15,8 @@ export default defineConfig({
   ],
 
   build: {
-    sourcemap: true,
+    sourcemap: !isSsrBuild,
+    copyPublicDir: !isSsrBuild,
     chunkSizeWarningLimit: 1200,
-
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
-        },
-      },
-    },
   },
-})
+}))

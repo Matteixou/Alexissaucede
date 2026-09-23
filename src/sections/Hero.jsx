@@ -1,35 +1,12 @@
-import { useRef, useEffect, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
 import { Zap } from 'lucide-react'
-
-const EASE = [0.16, 1, 0.3, 1]
-
-function CountUp({ num, prefix = '', suffix = '' }) {
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!inView) return
-    const duration  = 1600
-    const startTime = performance.now()
-    const tick = (now) => {
-      const p      = Math.min((now - startTime) / duration, 1)
-      const eased  = 1 - Math.pow(1 - p, 3)
-      setCount(Math.round(eased * num))
-      if (p < 1) requestAnimationFrame(tick)
-    }
-    requestAnimationFrame(tick)
-  }, [inView, num])
-
-  return <span ref={ref}>{prefix}{count}{suffix}</span>
-}
 
 const STATS = [
   { num: 8,   prefix: '',  suffix: ' ANS', bottom: "D'EXPÉRIENCE" },
   { num: 500, prefix: '+', suffix: '',     bottom: 'CLIENTS COACHÉS' },
   { num: 99,  prefix: '',  suffix: '%',    bottom: 'RÉSULTATS' },
 ]
+
+const delay = (s) => ({ animationDelay: `${s}s` })
 
 export default function Hero() {
   return (
@@ -51,49 +28,36 @@ export default function Hero() {
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 w-full pt-28 pb-20">
 
         {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
-          className="inline-flex items-center gap-2.5 mb-6"
-        >
+        <div className="anim-rise inline-flex items-center gap-2.5 mb-6" style={delay(0.05)}>
           <Zap size={11} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
           <span className="text-[10px] sm:text-[11px] tracking-[0.18em] sm:tracking-[0.28em] uppercase text-white/80">
             Méthode prouvée · Résultats réels
           </span>
           <Zap size={11} strokeWidth={1.5} style={{ color: '#E8FF00' }} />
-        </motion.div>
+        </div>
 
         {/* Titre XXL */}
         <div className="overflow-hidden">
-          <motion.h1
-            initial={{ y: 110, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.25 }}
-            className="font-display font-black italic leading-[0.88] uppercase text-bone"
-            style={{ fontSize: 'clamp(3rem, 12vw, 10rem)' }}
+          <h1
+            className="anim-reveal font-display font-black italic leading-[0.88] uppercase text-bone"
+            style={{ fontSize: 'clamp(3rem, 12vw, 10rem)', ...delay(0.1) }}
           >
             <span className="glitch-hero">Transforme</span>
-          </motion.h1>
+          </h1>
         </div>
         <div className="overflow-hidden mb-10 lg:mb-14">
-          <motion.p
-            initial={{ y: 110, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.38 }}
-            className="font-display font-black italic leading-[0.88] uppercase"
-            style={{ fontSize: 'clamp(3rem, 12vw, 10rem)', color: '#E8FF00', textShadow: '0 0 80px rgba(232,255,0,0.2)' }}
+          <p
+            className="anim-reveal font-display font-black italic leading-[0.88] uppercase"
+            style={{ fontSize: 'clamp(3rem, 12vw, 10rem)', color: '#E8FF00', textShadow: '0 0 80px rgba(232,255,0,0.2)', ...delay(0.2) }}
           >
             ton physique
-          </motion.p>
+          </p>
         </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: EASE, delay: 0.65 }}
-          className="grid grid-cols-3 gap-0 border-t border-b border-steel/30 py-8 mb-10 lg:mb-14"
+        <div
+          className="anim-rise grid grid-cols-3 gap-0 border-t border-b border-steel/30 py-8 mb-10 lg:mb-14"
+          style={delay(0.4)}
         >
           {STATS.map(({ num, prefix, suffix, bottom }, i) => (
             <div
@@ -103,28 +67,25 @@ export default function Hero() {
               <p
                 className="font-marker text-3xl sm:text-5xl lg:text-6xl leading-none mb-1 tabular-nums"
                 style={{ color: '#E8FF00', textShadow: '0 0 24px rgba(232,255,0,0.25)' }}
+                aria-hidden="true"
               >
-                <CountUp num={num} prefix={prefix} suffix={suffix} />
+                {prefix}<span className="count-up" style={{ '--to': num }} />{suffix}
               </p>
+              <span className="sr-only">{prefix}{num}{suffix}</span>
               <p className="text-[8px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.18em] uppercase text-ash font-heading text-center">{bottom}</p>
             </div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Description + preuves sociales */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: EASE, delay: 0.85 }}
-          className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-20"
-        >
+        {/* Description + preuves sociales — le paragraphe est l'élément LCP mobile : aucune animation d'opacité */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-20">
           <p className="text-base lg:text-lg text-ash leading-[1.75] lg:max-w-xl">
             Coaching personnalisé pour les personnes qui souhaitent être accompagnées dans leur transformation physique.
             Programme d'entraînement, nutrition, suivi hebdomadaire.
             Résultats visibles dès <span className="text-bone font-medium">4 semaines</span>.
           </p>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2 lg:ml-auto">
+          <div className="anim-rise flex flex-wrap gap-x-6 gap-y-2 lg:ml-auto" style={delay(0.55)}>
             <span className="flex items-center gap-1.5 text-[11px] tracking-[0.14em] uppercase text-white/80 font-semibold">
               <span style={{ color: '#E8FF00' }}>✓</span> Bilan gratuit
             </span>
@@ -135,31 +96,22 @@ export default function Hero() {
               <span style={{ color: '#E8FF00' }}>✓</span> Résultats en 4 semaines
             </span>
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: EASE, delay: 1.05 }}
-          className="mt-8"
-        >
-          <motion.button
+        <div className="anim-rise mt-8" style={delay(0.7)}>
+          <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="relative overflow-hidden text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold"
+            className="group relative overflow-hidden text-void px-10 py-4 rounded-xl text-[14px] tracking-[0.18em] uppercase font-heading font-bold transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: '#E8FF00' }}
           >
             <span className="relative z-10">Réserver mon bilan personnalisé gratuit →</span>
-            <motion.span
-              className="absolute inset-0 bg-white"
-              initial={{ x: '-105%' }}
-              whileHover={{ x: 0 }}
-              transition={{ duration: 0.45, ease: EASE }}
+            <span
+              className="absolute inset-0 bg-white -translate-x-[105%] group-hover:translate-x-0 transition-transform duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+              aria-hidden="true"
             />
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
 
       </div>
     </section>

@@ -1,6 +1,7 @@
-import React, { useState, lazy, Suspense } from 'react'
+import React, { useState, useRef, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Instagram, Mail, MapPin, Phone, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react'
+import useNearViewport from '../hooks/useNearViewport'
 
 const ContactCanvas = lazy(() => import('./ContactCanvas'))
 
@@ -132,6 +133,8 @@ export default function Contact() {
   const [form, setForm]       = useState(EMPTY_FORM)
   const [status, setStatus]   = useState('idle')
   const [sentPrenom, setSentPrenom] = useState('')
+  const sectionRef = useRef(null)
+  const near = useNearViewport(sectionRef, '600px')
 
   const set = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }))
   const setVal = (key) => (val) => setForm(prev => ({ ...prev, [key]: val }))
@@ -186,13 +189,15 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative py-28 px-6 lg:px-10 bg-obsidian border-t border-steel/40">
+    <section ref={sectionRef} id="contact" className="relative py-28 px-6 lg:px-10 bg-obsidian border-t border-steel/40">
 
-      <Suspense fallback={null}>
-        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
-          <ContactCanvas />
-        </div>
-      </Suspense>
+      {near && (
+        <Suspense fallback={null}>
+          <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.28 }} aria-hidden="true">
+            <ContactCanvas />
+          </div>
+        </Suspense>
+      )}
       <div
         className="absolute inset-0 pointer-events-none select-none"
         style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, #111118 100%)' }}
