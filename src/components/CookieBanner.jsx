@@ -30,6 +30,34 @@ function grantConsent() {
   })
 }
 
+// ~500 KB of tag JavaScript (GA4, Google Ads, Meta, Contentsquare): for returning visitors it waits
+// for the first interaction, or for the page to have been loaded and idle for a while.
+const TAGS_FALLBACK_DELAY_MS = 6000
+const INTERACTION_EVENTS = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart']
+
+function loadTagsWhenEngaged() {
+  let timer
+  let started = false
+  const start = () => {
+    if (started) return
+    started = true
+    INTERACTION_EVENTS.forEach((e) => window.removeEventListener(e, start))
+    window.removeEventListener('load', arm)
+    clearTimeout(timer)
+    loadGTM()
+    grantConsent()
+  }
+  const arm = () => {
+    timer = setTimeout(() => {
+      if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2000 })
+      else start()
+    }, TAGS_FALLBACK_DELAY_MS)
+  }
+  INTERACTION_EVENTS.forEach((e) => window.addEventListener(e, start, { once: true, passive: true }))
+  if (document.readyState === 'complete') arm()
+  else window.addEventListener('load', arm, { once: true })
+}
+
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
@@ -39,8 +67,7 @@ export default function CookieBanner() {
       if (!saved) {
         setVisible(true)
       } else if (saved === 'granted') {
-        loadGTM()
-        grantConsent()
+        loadTagsWhenEngaged()
       }
       // if 'denied': GTM never loads, no cookies
     } catch {}
