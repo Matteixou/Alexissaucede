@@ -18,7 +18,7 @@ const ids = [...new Set(fs.readdirSync(tDir).map(f => f.match(/^(\d+)\.(png|webp
 for (const id of ids) {
   const png = path.join(tDir, `${id}.png`)
   const src = fs.existsSync(png) ? png : path.join(tDir, `${id}.webp`)
-  for (const w of [400, 800]) await variant(src, `Transformation/${id}-${w}.webp`, w)
+  for (const w of [400, 600, 800]) await variant(src, `Transformation/${id}-${w}.webp`, w)
 }
 
 for (const w of [480, 800]) await variant(path.join(PUB, 'alexis-v2.jpeg'), `alexis-v2-${w}.webp`, w)

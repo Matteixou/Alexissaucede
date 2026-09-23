@@ -164,13 +164,14 @@ const ALL_TRANSFORMATIONS = [
 // 6 transformations tirées aléatoirement à chaque chargement de page — zéro coût au re-render
 const TRANSFORMATIONS = pickRandom(ALL_TRANSFORMATIONS, 6)
 
-// Variantes générées par scripts/responsive-images.mjs
-const IMG_SIZES = '(min-width: 768px) 384px, (min-width: 640px) 320px, 46vw'
+// Variantes générées par scripts/responsive-images.mjs. En object-contain dans une boîte h-80 / h-96,
+// la largeur affichée dépend de la hauteur : ~270 px pour les portraits, jusqu'à 384 px pour les carrées.
+const IMG_SIZES = '(min-width: 640px) 320px, 46vw'
 const imgProps = (src) => {
   const base = src.replace(/\.webp$/, '')
   return {
     src:      `${base}-800.webp`,
-    srcSet:   `${base}-400.webp 400w, ${base}-800.webp 800w`,
+    srcSet:   `${base}-400.webp 400w, ${base}-600.webp 600w, ${base}-800.webp 800w`,
     sizes:    IMG_SIZES,
     loading:  'lazy',
     decoding: 'async',
