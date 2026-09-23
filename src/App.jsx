@@ -6,45 +6,67 @@ import CookieBanner from './components/CookieBanner'
 import CustomCursor from './components/CustomCursor'
 import Hero from './sections/Hero'
 
-const Presentation     = lazy(() => import('./sections/Presentation'))
-const Transformations  = lazy(() => import('./sections/Transformations'))
-const LogoSection      = lazy(() => import('./sections/LogoSection'))
-const ProductShowcase  = lazy(() => import('./sections/ProductShowcase'))
-const ParallaxBanner   = lazy(() => import('./sections/ParallaxBanner'))
-const Reviews          = lazy(() => import('./sections/Reviews'))
-const KeyBenefits      = lazy(() => import('./sections/KeyBenefits'))
-const Ingredients      = lazy(() => import('./sections/Ingredients'))
-const FAQ              = lazy(() => import('./sections/FAQ'))
-const Contact          = lazy(() => import('./sections/Contact'))
+const load = {
+  Presentation:    () => import('./sections/Presentation'),
+  LogoSection:     () => import('./sections/LogoSection'),
+  Transformations: () => import('./sections/Transformations'),
+  ProductShowcase: () => import('./sections/ProductShowcase'),
+  ParallaxBanner:  () => import('./sections/ParallaxBanner'),
+  Reviews:         () => import('./sections/Reviews'),
+  KeyBenefits:     () => import('./sections/KeyBenefits'),
+  Ingredients:     () => import('./sections/Ingredients'),
+  FAQ:             () => import('./sections/FAQ'),
+  Contact:         () => import('./sections/Contact'),
+}
+const Presentation     = lazy(load.Presentation)
+const LogoSection      = lazy(load.LogoSection)
+const Transformations  = lazy(load.Transformations)
+const ProductShowcase  = lazy(load.ProductShowcase)
+const ParallaxBanner   = lazy(load.ParallaxBanner)
+const Reviews          = lazy(load.Reviews)
+const KeyBenefits      = lazy(load.KeyBenefits)
+const Ingredients      = lazy(load.Ingredients)
+const FAQ              = lazy(load.FAQ)
+const Contact          = lazy(load.Contact)
 const MentionsLegales  = lazy(() => import('./pages/MentionsLegales'))
 const CGV              = lazy(() => import('./pages/CGV'))
 
 const YEAR = new Date().getFullYear()
 
-// Pre-rendered HTML contains only the hero; below-the-fold sections mount after hydration.
-// One Suspense boundary so they appear together in page order: revealed one by one, a section
-// could briefly sit right under the hero and trigger the 3D logos' viewport-based loading.
+const SECTIONS = [
+  <Presentation key="presentation" />,
+  <LogoSection key="logo" />,
+  <Transformations key="transformations" />,
+  <ProductShowcase key="tarifs" />,
+  <ParallaxBanner key="banner1" banner={1} position="center" />,
+  <Reviews key="avis" />,
+  <ParallaxBanner key="banner2" banner={2} position="left bottom" />,
+  <KeyBenefits key="methode" />,
+  <ParallaxBanner key="banner3" banner={3} position="center" />,
+  <Ingredients key="modules" />,
+  <ParallaxBanner key="banner4" banner={4} position="right bottom" />,
+  <FAQ key="faq" />,
+  <Contact key="contact" />,
+]
+
+// The pre-rendered HTML holds only the hero. The other sections mount after hydration one per
+// frame, in page order: mounting them together meant a single ~200 ms layout task, and a section
+// revealed out of order could sit under the hero and trigger the 3D logos' near-viewport loading.
 function HomeSections() {
-  const [ready, setReady] = useState(false)
-  useEffect(() => { startTransition(() => setReady(true)) }, [])
-  if (!ready) return null
-  return (
-    <Suspense fallback={null}>
-      <Presentation />
-      <LogoSection />
-      <Transformations />
-      <ProductShowcase />
-      <ParallaxBanner banner={1} position="center" />
-      <Reviews />
-      <ParallaxBanner banner={2} position="left bottom" />
-      <KeyBenefits />
-      <ParallaxBanner banner={3} position="center" />
-      <Ingredients />
-      <ParallaxBanner banner={4} position="right bottom" />
-      <FAQ />
-      <Contact />
-    </Suspense>
-  )
+  const [count, setCount] = useState(0)
+
+  useEffect(() => { Object.values(load).forEach((fn) => fn()) }, [])
+
+  useEffect(() => {
+    if (count >= SECTIONS.length) return
+    let timer
+    const frame = requestAnimationFrame(() => {
+      timer = setTimeout(() => startTransition(() => setCount((c) => c + 1)), 0)
+    })
+    return () => { cancelAnimationFrame(frame); clearTimeout(timer) }
+  }, [count])
+
+  return <Suspense fallback={null}>{SECTIONS.slice(0, count)}</Suspense>
 }
 
 export default function App() {
