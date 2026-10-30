@@ -164,7 +164,17 @@ export default function App() {
               CGV
             </Link>
             <span aria-hidden="true">·</span>
-            <p>Fait par Krylos</p>
+            <p>
+              Fait par{' '}
+              <a
+                href="https://www.krylos.fr/"
+                target="_blank"
+                rel="noopener"
+                className="hover:text-ash transition-colors duration-300"
+              >
+                Krylos
+              </a>
+            </p>
           </div>
         </div>
       </footer>
