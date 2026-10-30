@@ -163,6 +163,8 @@ export default function App() {
             <Link to="/cgv" className="hover:text-ash transition-colors duration-300">
               CGV
             </Link>
+            <span aria-hidden="true">·</span>
+            <p>Fait par Krylos</p>
           </div>
         </div>
       </footer>
